@@ -1,14 +1,12 @@
 import React, { useRef, useEffect, useState } from "react";
+import { useMLPStore } from "../stores/useMLPStore";
 
-type Props = {
-  onDrawEnd?: (pixels: number[]) => void;
-};
-
-export const CanvasInput: React.FC<Props> = ({ onDrawEnd }) => {
+export const CanvasInput: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const size = 280; // canvas pixel size
+  const size = 280;
   const cell = size / 8;
   const [isDrawing, setIsDrawing] = useState(false);
+  const setPixels = useMLPStore((s) => s.setPixels);
 
   useEffect(() => {
     const ctx = canvasRef.current?.getContext("2d");
@@ -56,16 +54,16 @@ export const CanvasInput: React.FC<Props> = ({ onDrawEnd }) => {
               const px = Math.floor(col * cell + x);
               const py = Math.floor(row * cell + y);
               const i = (py * size + px) * 4;
-              const val = imageData.data[i]; // Red channel
+              const val = imageData.data[i];
               sum += 255 - val;
               count++;
             }
           }
-          pixels.push(sum / count / 255); // normalize to 0..1
+          pixels.push(sum / count / 255);
         }
       }
 
-      onDrawEnd?.(pixels);
+      setPixels(pixels);
     }
   };
 

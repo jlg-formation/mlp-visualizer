@@ -1,35 +1,36 @@
-import * as tf from "@tensorflow/tfjs";
-import { useEffect, useState } from "react";
-import { CanvasInput } from "../components/CanvasInput";
-import { MLPGraph } from "../components/MLPGraph";
-import { ModelConfigurator } from "../components/ModelConfigurator";
 import { ModelStoragePanel } from "../components/ModelStoragePanel";
+import { useEffect, useState } from "react";
+import * as tf from "@tensorflow/tfjs";
+import { useMLPStore } from "../stores/useMLPStore";
+import { CanvasInput } from "../components/CanvasInput";
+import { ModelConfigurator } from "../components/ModelConfigurator";
 import { PredictPanel } from "../components/PredictPanel";
-import { TrainingChart } from "../components/TrainingChart";
 import { TrainingPanel } from "../components/TrainingPanel";
+import { TrainingChart } from "../components/TrainingChart";
+import { MLPGraph } from "../components/MLPGraph";
 import { createModel } from "../lib/model";
+import { extractLayerStructure } from "../lib/extractLayerStructure"; // à créer si souhaité
 
 interface DigitSample {
   pixels: number[]; // 64 valeurs normalisées (0..1)
   label: number; // chiffre entre 0 et 9
 }
 
-function extractLayerStructure(model: tf.LayersModel): number[] {
-  return model.layers.map((layer) => {
-    const shape = layer.outputShape;
-    if (Array.isArray(shape)) {
-      const size = Array.isArray(shape[1]) ? shape[1][0] : shape[1]; // [null, 32]
-      return typeof size === "number" ? size : 0;
-    }
-    return 0;
-  });
-}
-
 export default function Playground() {
-  const [pixels, setPixels] = useState<number[]>([]);
-  const [layers, setLayers] = useState<number[]>([32, 16]);
-  const [model, setModel] = useState<tf.LayersModel | null>(null);
+  const model = useMLPStore((s) => s.model);
+  const setModel = useMLPStore((s) => s.setModel);
+  const layers = useMLPStore((s) => s.layers);
+  const setLayers = useMLPStore((s) => s.setLayers);
+  const pixels = useMLPStore((s) => s.pixels);
+  const setPixels = useMLPStore((s) => s.setPixels);
+  const training = useMLPStore((s) => s.training);
+  const setTraining = useMLPStore((s) => s.setTraining);
+  const trainingHistory = useMLPStore((s) => s.trainingHistory);
+  const resetHistory = useMLPStore((s) => s.resetHistory);
+  const updateHistory = useMLPStore((s) => s.updateHistory);
+
   const [structure, setStructure] = useState<number[]>([]);
+
   const [trainData, setTrainData] = useState<{
     xs: tf.Tensor;
     ys: tf.Tensor;
@@ -38,15 +39,6 @@ export default function Playground() {
     xs: tf.Tensor;
     ys: tf.Tensor;
   } | null>(null);
-
-  const [trainingHistory, setTrainingHistory] = useState({
-    epochs: [] as number[],
-    loss: [] as number[],
-    valLoss: [] as number[],
-    accuracy: [] as number[],
-    valAccuracy: [] as number[],
-  });
-  const [training, setTraining] = useState(false);
 
   // Charger les données (par ex depuis digits_8x8.json)
   useEffect(() => {
@@ -74,26 +66,20 @@ export default function Playground() {
   }, []);
 
   useEffect(() => {
-    const m = createModel(layers); // ex: [32, 16]
-    m.predict(tf.zeros([1, 64])); // warm-up
+    const m = createModel(layers);
+    m.predict(tf.zeros([1, 64]));
     setModel(m);
     setStructure(extractLayerStructure(m));
-  }, [layers]);
+    resetHistory();
+  }, [layers, setModel, resetHistory]);
 
   const handleReset = () => {
     const newModel = createModel(layers);
-    newModel.predict(tf.zeros([1, 64])); // warm-up
-
+    newModel.predict(tf.zeros([1, 64]));
     setModel(newModel);
     setStructure(extractLayerStructure(newModel));
     setPixels([]);
-    setTrainingHistory({
-      epochs: [],
-      loss: [],
-      valLoss: [],
-      accuracy: [],
-      valAccuracy: [],
-    });
+    resetHistory();
   };
 
   return (
@@ -125,15 +111,7 @@ export default function Playground() {
           model={model}
           trainData={trainData}
           testData={testData}
-          onEpochEnd={(epoch, logs) => {
-            setTrainingHistory((prev) => ({
-              epochs: [...prev.epochs, epoch + 1],
-              loss: [...prev.loss, logs.loss ?? 0],
-              valLoss: [...prev.valLoss, logs.val_loss ?? 0],
-              accuracy: [...prev.accuracy, logs.acc ?? 0],
-              valAccuracy: [...prev.valAccuracy, logs.val_acc ?? 0],
-            }));
-          }}
+          onEpochEnd={(epoch, logs) => updateHistory(epoch, logs)}
           setTraining={setTraining}
         />
       )}
@@ -141,7 +119,7 @@ export default function Playground() {
         <TrainingChart history={trainingHistory} />
       )}
 
-      <CanvasInput onDrawEnd={setPixels} />
+      <CanvasInput />
       {model && pixels.length === 64 && (
         <PredictPanel model={model} input={pixels} />
       )}
