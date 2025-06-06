@@ -1,19 +1,27 @@
+import { createModel } from "./lib/model";
+import { useEffect, useState } from "react";
+import { PredictPanel } from "./components/PredictPanel";
 import { CanvasInput } from "./components/CanvasInput";
-
-const res = await fetch("/digits_8x8.json");
-const digits = await res.json();
-console.log("digits: ", digits);
+import * as tf from "@tensorflow/tfjs";
 
 function App() {
-  const handleDraw = (pixels: number[]) => {
-    console.log("Pixels 8x8 normalisés :", pixels);
-    // TODO : feed to MLP model.predict(tf.tensor([pixels]))
-  };
+  const [pixels, setPixels] = useState<number[]>([]);
+  const [model, setModel] = useState<tf.LayersModel | null>(null);
+
+  useEffect(() => {
+    // Charger ou entraîner un modèle simple au démarrage
+    const m = createModel();
+    m.predict(tf.zeros([1, 64])); // warm-up
+    setModel(m);
+  }, []);
 
   return (
-    <div className="p-6">
-      <h1 className="text-xl font-bold mb-4">Dessine un chiffre</h1>
-      <CanvasInput onDrawEnd={handleDraw} />
+    <div className="p-6 space-y-6">
+      <h1 className="text-2xl font-bold">MLP Visualizer</h1>
+      <CanvasInput onDrawEnd={setPixels} />
+      {model && pixels.length === 64 && (
+        <PredictPanel model={model} input={pixels} />
+      )}
     </div>
   );
 }
