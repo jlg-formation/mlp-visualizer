@@ -7,6 +7,7 @@ type Props = {
   testData: { xs: tf.Tensor; ys: tf.Tensor };
   onTrainEnd?: () => void;
   onEpochEnd?: (epoch: number, logs: tf.Logs) => void;
+  setTraining?: (v: boolean) => void;
 };
 
 export const TrainingPanel: React.FC<Props> = ({
@@ -15,14 +16,16 @@ export const TrainingPanel: React.FC<Props> = ({
   testData,
   onTrainEnd,
   onEpochEnd,
+  setTraining,
 }) => {
   const [learningRate, setLearningRate] = useState(0.01);
   const [epochs, setEpochs] = useState(10);
   const [batchSize, setBatchSize] = useState(32);
-  const [training, setTraining] = useState(false);
+  const [localTraining, setLocalTraining] = useState(false);
 
   const startTraining = async () => {
-    setTraining(true);
+    setLocalTraining(true);
+    setTraining?.(true);
 
     model.compile({
       optimizer: tf.train.adam(learningRate),
@@ -39,7 +42,8 @@ export const TrainingPanel: React.FC<Props> = ({
           onEpochEnd?.(epoch, logs as tf.Logs);
         },
         onTrainEnd: async () => {
-          setTraining(false);
+          setLocalTraining(false);
+          setTraining?.(false);
           onTrainEnd?.();
         },
       },
@@ -84,10 +88,10 @@ export const TrainingPanel: React.FC<Props> = ({
       </div>
       <button
         onClick={startTraining}
-        disabled={training}
+        disabled={localTraining}
         className="mt-2 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-50"
       >
-        {training ? "Entraînement en cours..." : "Lancer l'entraînement"}
+        {localTraining ? "Entraînement en cours..." : "Lancer l'entraînement"}
       </button>
     </div>
   );

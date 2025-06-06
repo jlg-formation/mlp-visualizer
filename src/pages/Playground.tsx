@@ -9,6 +9,11 @@ import { TrainingChart } from "../components/TrainingChart";
 import { TrainingPanel } from "../components/TrainingPanel";
 import { createModel } from "../lib/model";
 
+interface DigitSample {
+  pixels: number[]; // 64 valeurs normalisées (0..1)
+  label: number; // chiffre entre 0 et 9
+}
+
 function extractLayerStructure(model: tf.LayersModel): number[] {
   return model.layers.map((layer) => {
     const shape = layer.outputShape;
@@ -41,12 +46,13 @@ export default function Playground() {
     accuracy: [] as number[],
     valAccuracy: [] as number[],
   });
+  const [training, setTraining] = useState(false);
 
   // Charger les données (par ex depuis digits_8x8.json)
   useEffect(() => {
     fetch("/digits_8x8.json")
       .then((res) => res.json())
-      .then((data) => {
+      .then((data: DigitSample[]) => {
         const shuffled = data.sort(() => Math.random() - 0.5);
         const split = Math.floor(shuffled.length * 0.8);
 
@@ -74,9 +80,33 @@ export default function Playground() {
     setStructure(extractLayerStructure(m));
   }, [layers]);
 
+  const handleReset = () => {
+    const newModel = createModel(layers);
+    newModel.predict(tf.zeros([1, 64])); // warm-up
+
+    setModel(newModel);
+    setStructure(extractLayerStructure(newModel));
+    setPixels([]);
+    setTrainingHistory({
+      epochs: [],
+      loss: [],
+      valLoss: [],
+      accuracy: [],
+      valAccuracy: [],
+    });
+  };
+
   return (
     <div className="p-6 space-y-6">
       <h1 className="text-xl font-bold">Playground</h1>
+
+      <button
+        onClick={handleReset}
+        disabled={training}
+        className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 disabled:opacity-50"
+      >
+        🔁 Réinitialiser le Playground
+      </button>
 
       <ModelConfigurator defaultLayers={layers} onChange={setLayers} />
       {model && (
@@ -104,6 +134,7 @@ export default function Playground() {
               valAccuracy: [...prev.valAccuracy, logs.val_acc ?? 0],
             }));
           }}
+          setTraining={setTraining}
         />
       )}
       {trainingHistory.epochs.length > 0 && (
