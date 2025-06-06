@@ -1,29 +1,29 @@
-import { createModel } from "./lib/model";
-import { useEffect, useState } from "react";
-import { PredictPanel } from "./components/PredictPanel";
-import { CanvasInput } from "./components/CanvasInput";
-import * as tf from "@tensorflow/tfjs";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import Home from "./pages/Home";
+import Playground from "./pages/Playground";
+import Doc from "./pages/Doc";
 
-function App() {
-  const [pixels, setPixels] = useState<number[]>([]);
-  const [model, setModel] = useState<tf.LayersModel | null>(null);
-
-  useEffect(() => {
-    // Charger ou entraîner un modèle simple au démarrage
-    const m = createModel();
-    m.predict(tf.zeros([1, 64])); // warm-up
-    setModel(m);
-  }, []);
-
+export default function App() {
   return (
-    <div className="p-6 space-y-6">
-      <h1 className="text-2xl font-bold">MLP Visualizer</h1>
-      <CanvasInput onDrawEnd={setPixels} />
-      {model && pixels.length === 64 && (
-        <PredictPanel model={model} input={pixels} />
-      )}
-    </div>
+    <Router>
+      <nav className="bg-white shadow p-4 flex gap-4 text-blue-700 font-medium">
+        <Link to="/" className="hover:underline">
+          Accueil
+        </Link>
+        <Link to="/playground" className="hover:underline">
+          Playground
+        </Link>
+        <Link to="/doc" className="hover:underline">
+          Documentation
+        </Link>
+      </nav>
+      <main className="min-h-screen bg-gray-50">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/playground" element={<Playground />} />
+          <Route path="/doc" element={<Doc />} />
+        </Routes>
+      </main>
+    </Router>
   );
 }
-
-export default App;
