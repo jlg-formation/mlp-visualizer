@@ -1,39 +1,38 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useMLPStore } from "../stores/useMLPStore";
 
-type Props = {
-  defaultLayers?: number[];
-  onChange: (layers: number[]) => void;
-};
+export const ModelConfigurator: React.FC = () => {
+  const layers = useMLPStore((s) => s.layers);
+  const setLayers = useMLPStore((s) => s.setLayers);
+  const [localLayers, setLocalLayers] = useState<number[]>(layers);
 
-export const ModelConfigurator: React.FC<Props> = ({
-  defaultLayers = [32, 16],
-  onChange,
-}) => {
-  const [layers, setLayers] = useState<number[]>(defaultLayers);
+  useEffect(() => {
+    setLocalLayers(layers);
+  }, [layers]);
 
   const updateLayer = (index: number, value: number) => {
-    const newLayers = [...layers];
-    newLayers[index] = value;
-    setLayers(newLayers);
-    onChange(newLayers);
+    const updated = [...localLayers];
+    updated[index] = value;
+    setLocalLayers(updated);
+    setLayers(updated);
   };
 
   const addLayer = () => {
-    const newLayers = [...layers, 8];
-    setLayers(newLayers);
-    onChange(newLayers);
+    const updated = [...localLayers, 8];
+    setLocalLayers(updated);
+    setLayers(updated);
   };
 
   const removeLayer = (index: number) => {
-    const newLayers = layers.filter((_, i) => i !== index);
-    setLayers(newLayers);
-    onChange(newLayers);
+    const updated = localLayers.filter((_, i) => i !== index);
+    setLocalLayers(updated);
+    setLayers(updated);
   };
 
   return (
     <div className="bg-white p-4 rounded shadow space-y-3">
       <h2 className="text-lg font-bold">Configuration du modèle</h2>
-      {layers.map((size, i) => (
+      {localLayers.map((size, i) => (
         <div key={i} className="flex items-center gap-2">
           <label className="text-sm">Couche {i + 1}</label>
           <input
@@ -43,7 +42,7 @@ export const ModelConfigurator: React.FC<Props> = ({
             onChange={(e) => updateLayer(i, parseInt(e.target.value))}
             className="w-20 border p-1 rounded text-sm"
           />
-          {layers.length > 1 && (
+          {localLayers.length > 1 && (
             <button
               onClick={() => removeLayer(i)}
               className="text-red-500 text-sm hover:underline"

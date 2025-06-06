@@ -20,7 +20,6 @@ export default function Playground() {
   const model = useMLPStore((s) => s.model);
   const setModel = useMLPStore((s) => s.setModel);
   const layers = useMLPStore((s) => s.layers);
-  const setLayers = useMLPStore((s) => s.setLayers);
   const pixels = useMLPStore((s) => s.pixels);
   const setPixels = useMLPStore((s) => s.setPixels);
   const training = useMLPStore((s) => s.training);
@@ -94,7 +93,8 @@ export default function Playground() {
         🔁 Réinitialiser le Playground
       </button>
 
-      <ModelConfigurator defaultLayers={layers} onChange={setLayers} />
+      <ModelConfigurator />
+
       {model && (
         <>
           {structure.length > 0 && (
