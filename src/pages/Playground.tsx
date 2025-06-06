@@ -20,7 +20,6 @@ export default function Playground() {
   const model = useMLPStore((s) => s.model);
   const setModel = useMLPStore((s) => s.setModel);
   const layers = useMLPStore((s) => s.layers);
-  const setPixels = useMLPStore((s) => s.setPixels);
   const training = useMLPStore((s) => s.training);
   const trainingHistory = useMLPStore((s) => s.trainingHistory);
   const resetHistory = useMLPStore((s) => s.resetHistory);
