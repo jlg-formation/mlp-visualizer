@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
 import * as tf from "@tensorflow/tfjs";
+import { useMLPStore } from "../stores/useMLPStore";
 
-type Props = {
-  model: tf.LayersModel;
-  input: number[]; // tableau de 64 valeurs normalisées (0-1)
-};
+export const PredictPanel: React.FC = () => {
+  const model = useMLPStore((s) => s.model);
+  const input = useMLPStore((s) => s.pixels);
 
-export const PredictPanel: React.FC<Props> = ({ model, input }) => {
   const [prediction, setPrediction] = useState<number | null>(null);
   const [probs, setProbs] = useState<number[] | null>(null);
 
   useEffect(() => {
     const runPrediction = async () => {
+      if (!model || input.length !== 64) return;
       const inputTensor = tf.tensor2d([input], [1, 64]);
       const result = model.predict(inputTensor) as tf.Tensor;
       const probArray = Array.from(await result.data()) as number[];
@@ -21,7 +21,7 @@ export const PredictPanel: React.FC<Props> = ({ model, input }) => {
       setPrediction(predictedDigit);
     };
 
-    if (input.length === 64) runPrediction();
+    runPrediction();
   }, [input, model]);
 
   return (

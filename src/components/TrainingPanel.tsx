@@ -1,31 +1,28 @@
 import React, { useState } from "react";
 import * as tf from "@tensorflow/tfjs";
+import { useMLPStore } from "../stores/useMLPStore";
 
 type Props = {
   model: tf.LayersModel;
   trainData: { xs: tf.Tensor; ys: tf.Tensor };
   testData: { xs: tf.Tensor; ys: tf.Tensor };
-  onTrainEnd?: () => void;
-  onEpochEnd?: (epoch: number, logs: tf.Logs) => void;
-  setTraining?: (v: boolean) => void;
 };
 
 export const TrainingPanel: React.FC<Props> = ({
   model,
   trainData,
   testData,
-  onTrainEnd,
-  onEpochEnd,
-  setTraining,
 }) => {
   const [learningRate, setLearningRate] = useState(0.01);
   const [epochs, setEpochs] = useState(10);
   const [batchSize, setBatchSize] = useState(32);
-  const [localTraining, setLocalTraining] = useState(false);
+
+  const training = useMLPStore((s) => s.training);
+  const setTraining = useMLPStore((s) => s.setTraining);
+  const updateHistory = useMLPStore((s) => s.updateHistory);
 
   const startTraining = async () => {
-    setLocalTraining(true);
-    setTraining?.(true);
+    setTraining(true);
 
     model.compile({
       optimizer: tf.train.adam(learningRate),
@@ -39,12 +36,10 @@ export const TrainingPanel: React.FC<Props> = ({
       validationData: [testData.xs, testData.ys],
       callbacks: {
         onEpochEnd: async (epoch, logs) => {
-          onEpochEnd?.(epoch, logs as tf.Logs);
+          updateHistory(epoch, logs as tf.Logs);
         },
         onTrainEnd: async () => {
-          setLocalTraining(false);
-          setTraining?.(false);
-          onTrainEnd?.();
+          setTraining(false);
         },
       },
     });
@@ -88,10 +83,10 @@ export const TrainingPanel: React.FC<Props> = ({
       </div>
       <button
         onClick={startTraining}
-        disabled={localTraining}
+        disabled={training}
         className="mt-2 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-50"
       >
-        {localTraining ? "Entraînement en cours..." : "Lancer l'entraînement"}
+        {training ? "Entraînement en cours..." : "Lancer l'entraînement"}
       </button>
     </div>
   );

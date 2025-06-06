@@ -20,13 +20,11 @@ export default function Playground() {
   const model = useMLPStore((s) => s.model);
   const setModel = useMLPStore((s) => s.setModel);
   const layers = useMLPStore((s) => s.layers);
-  const pixels = useMLPStore((s) => s.pixels);
   const setPixels = useMLPStore((s) => s.setPixels);
   const training = useMLPStore((s) => s.training);
-  const setTraining = useMLPStore((s) => s.setTraining);
   const trainingHistory = useMLPStore((s) => s.trainingHistory);
   const resetHistory = useMLPStore((s) => s.resetHistory);
-  const updateHistory = useMLPStore((s) => s.updateHistory);
+  const resetAll = useMLPStore((s) => s.resetAll);
 
   const [structure, setStructure] = useState<number[]>([]);
 
@@ -73,12 +71,11 @@ export default function Playground() {
   }, [layers, setModel, resetHistory]);
 
   const handleReset = () => {
-    const newModel = createModel(layers);
+    resetAll();
+    const newModel = createModel([32, 16]);
     newModel.predict(tf.zeros([1, 64]));
     setModel(newModel);
     setStructure(extractLayerStructure(newModel));
-    setPixels([]);
-    resetHistory();
   };
 
   return (
@@ -111,8 +108,6 @@ export default function Playground() {
           model={model}
           trainData={trainData}
           testData={testData}
-          onEpochEnd={(epoch, logs) => updateHistory(epoch, logs)}
-          setTraining={setTraining}
         />
       )}
       {trainingHistory.epochs.length > 0 && (
@@ -120,9 +115,7 @@ export default function Playground() {
       )}
 
       <CanvasInput />
-      {model && pixels.length === 64 && (
-        <PredictPanel model={model} input={pixels} />
-      )}
+      <PredictPanel />
     </div>
   );
 }

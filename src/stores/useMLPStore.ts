@@ -21,6 +21,7 @@ interface MLPStore {
   setTraining: (v: boolean) => void;
   resetHistory: () => void;
   updateHistory: (epoch: number, logs: tf.Logs) => void;
+  resetAll: () => void;
 }
 
 export const useMLPStore = create<MLPStore>((set) => ({
@@ -59,4 +60,18 @@ export const useMLPStore = create<MLPStore>((set) => ({
         valAccuracy: [...state.trainingHistory.valAccuracy, logs.val_acc ?? 0],
       },
     })),
+  resetAll: () =>
+    set({
+      model: null,
+      layers: [32, 16],
+      pixels: [],
+      training: false,
+      trainingHistory: {
+        epochs: [],
+        loss: [],
+        valLoss: [],
+        accuracy: [],
+        valAccuracy: [],
+      },
+    }),
 }));
