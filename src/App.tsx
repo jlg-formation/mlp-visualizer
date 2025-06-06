@@ -1,12 +1,19 @@
-import { useState } from "react";
-import { MLPGraph } from "./components/MLPGraph";
+import { CanvasInput } from "./components/CanvasInput";
+
+const res = await fetch("/digits_8x8.json");
+const digits = await res.json();
+console.log("digits: ", digits);
 
 function App() {
-  const [layers, setLayers] = useState([64, 32, 16, 10]);
+  const handleDraw = (pixels: number[]) => {
+    console.log("Pixels 8x8 normalisés :", pixels);
+    // TODO : feed to MLP model.predict(tf.tensor([pixels]))
+  };
+
   return (
-    <div className="min-h-screen p-8 bg-gray-100">
-      <h1 className="text-3xl font-bold mb-4">MLP Visualizer</h1>
-      <MLPGraph layers={layers} />
+    <div className="p-6">
+      <h1 className="text-xl font-bold mb-4">Dessine un chiffre</h1>
+      <CanvasInput onDrawEnd={handleDraw} />
     </div>
   );
 }
