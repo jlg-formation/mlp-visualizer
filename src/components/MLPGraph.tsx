@@ -11,7 +11,7 @@ export const MLPGraph: React.FC<Props> = ({ layers, activations }) => {
       {layers.map((count, layerIndex) => {
         return Array.from({ length: count }).map((_, i) => {
           const x = 100 + layerIndex * 120;
-          const y = 50 + (i * 300) / (count - 1);
+          const y = count > 1 ? 50 + (i * 300) / (count - 1) : 200;
           const activation = activations?.[layerIndex]?.[i] ?? 0;
           const color = activation > 0.5 ? "green" : "black";
 
