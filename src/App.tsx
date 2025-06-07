@@ -1,13 +1,11 @@
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { HashRouter as Router, Routes, Route, Link } from "react-router-dom";
 import Home from "./pages/Home";
 import Playground from "./pages/Playground";
 import Doc from "./pages/Doc";
 
-const basename = import.meta.env.BASE_URL;
-
 export default function App() {
   return (
-    <Router basename={basename}>
+    <Router>
       <nav className="bg-white shadow p-4 flex gap-4 text-blue-700 font-medium">
         <Link to="/" className="hover:underline">
           Accueil
