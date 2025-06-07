@@ -9,7 +9,6 @@ export default function Home() {
     "Définir le modèle",
     "Entrainer le modèle",
     "Tester le modèle",
-    "Finaliser",
   ];
 
   return (

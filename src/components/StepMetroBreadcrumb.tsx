@@ -31,7 +31,7 @@ export const StepMetroBreadcrumb: React.FC<StepMetroBreadcrumbProps> = ({
         }}
       />
       {/* Les étapes */}
-      <div className="flex w-full justify-between z-10">
+      <div className="flex w-full justify-start z-10">
         {steps.map((step, idx) => (
           <div
             key={idx}
