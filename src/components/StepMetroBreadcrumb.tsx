@@ -2,7 +2,12 @@ import React from "react";
 
 export interface StepMetroBreadcrumbProps {
   steps: string[];
-  currentStep: number; // 0-based index
+  /**
+   * Position courante.
+   * 0 indique qu'aucune étape n'est encore démarrée.
+   * 1 correspond à la première étape, etc.
+   */
+  currentStep: number;
   circleSize?: number; // diamètre en px (optionnel, défaut 40)
   itemWidth?: number; // largeur d'un item (optionnel, défaut 128)
 }
@@ -32,35 +37,41 @@ export const StepMetroBreadcrumb: React.FC<StepMetroBreadcrumbProps> = ({
       />
       {/* Les étapes */}
       <div className="flex w-full justify-start z-10">
-        {steps.map((step, idx) => (
-          <div
-            key={idx}
-            className="flex flex-col items-center"
-            style={{ minWidth: itemWidth, width: itemWidth }}
-          >
+        {steps.map((step, idx) => {
+          const stepNumber = idx + 1;
+          const isCompleted = currentStep > stepNumber;
+          const isCurrent = currentStep === stepNumber;
+
+          return (
             <div
-              className={[
-                "flex items-center justify-center rounded-full border-2 font-bold",
-                idx < currentStep
-                  ? "bg-green-500 border-green-500 text-white"
-                  : idx === currentStep
-                  ? "bg-blue-500 border-blue-500 text-white"
-                  : "bg-gray-200 border-gray-300 text-gray-500",
-              ].join(" ")}
-              style={{
-                width: circleSize,
-                height: circleSize,
-                fontSize: circleSize / 2,
-                zIndex: 1,
-              }}
+              key={idx}
+              className="flex flex-col items-center"
+              style={{ minWidth: itemWidth, width: itemWidth }}
             >
-              {idx < currentStep ? "✓" : idx + 1}
+              <div
+                className={[
+                  "flex items-center justify-center rounded-full border-2 font-bold",
+                  isCompleted
+                    ? "bg-green-500 border-green-500 text-white"
+                    : isCurrent
+                    ? "bg-blue-500 border-blue-500 text-white"
+                    : "bg-gray-200 border-gray-300 text-gray-500",
+                ].join(" ")}
+                style={{
+                  width: circleSize,
+                  height: circleSize,
+                  fontSize: circleSize / 2,
+                  zIndex: 1,
+                }}
+              >
+                {isCompleted ? "✓" : stepNumber}
+              </div>
+              <span className="flex items-center justify-center mt-2 text-sm font-semibold w-full break-words h-8 text-center p-4">
+                {step}
+              </span>
             </div>
-            <span className="flex items-center justify-center mt-2 text-sm font-semibold w-full break-words h-8 text-center p-4">
-              {step}
-            </span>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
