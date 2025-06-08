@@ -44,10 +44,15 @@ export const useMLPStore = create<MLPStore>((set) => {
     valAccuracy: [],
   });
 
+  const defaultLayers = [32, 16];
+  const defaultModel = createModel(defaultLayers);
+  defaultModel.predict(tf.zeros([1, 64]));
+  const defaultStructure = extractLayerStructure(defaultModel);
+
   const store: MLPStore = {
-    model: null,
-    layers: [32, 16],
-    structure: [],
+    model: defaultModel,
+    layers: defaultLayers,
+    structure: defaultStructure,
     pixels: [],
     trainData: null,
     testData: null,
@@ -120,9 +125,8 @@ export const useMLPStore = create<MLPStore>((set) => {
     },
   };
 
-  // automatically load the dataset and create the initial model
+  // automatically load the dataset
   void store.loadData();
-  store.setLayers(store.layers);
 
   return store;
 });
