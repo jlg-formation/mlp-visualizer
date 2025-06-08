@@ -1,8 +1,40 @@
+import { CanvasInput } from "../components/CanvasInput";
+import { ModelConfigurator } from "../components/ModelConfigurator";
+import { PredictPanel } from "../components/PredictPanel";
+
+const View = ({ name }: { name: string }) => (
+  <div className="border p-2 text-center text-sm">{name}</div>
+);
+
 export default function Board() {
   return (
-    <div className="p-6">
-      <h1 className="text-xl font-bold">Board</h1>
-      <p className="mt-2">This is the board page.</p>
+    <div className="h-[40em] flex flex-col">
+      <div className="flex flex-1">
+        {/* Left Column */}
+        <div className="w-[20em] flex flex-col ">
+          <ModelConfigurator />
+          <View name="LoadSaveModelView" />
+        </div>
+
+        {/* Center Column */}
+        <div className="flex-grow flex flex-col">
+          <div className="flex justify-start">
+            <CanvasInput />
+            <div className="flex-grow h-full">
+              <PredictPanel />
+            </div>
+          </div>
+          <div className="flex-grow ">
+            <View name="ModelView" />
+          </div>
+        </div>
+
+        {/* Right Column */}
+        <div className="w-[20em] flex flex-col">
+          <View name="TrainModelView" />
+          <View name="GraphicalTrainingView" />
+        </div>
+      </div>
     </div>
   );
 }

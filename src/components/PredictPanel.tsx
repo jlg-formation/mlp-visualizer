@@ -25,7 +25,7 @@ export const PredictPanel: React.FC = () => {
   }, [input, model]);
 
   return (
-    <div className="mt-4 p-4 border rounded bg-white shadow">
+    <div className="p-4 border bg-white h-full">
       <h2 className="text-lg font-semibold mb-2">Prédiction</h2>
 
       {prediction !== null && (
@@ -36,7 +36,7 @@ export const PredictPanel: React.FC = () => {
       )}
 
       {probs && (
-        <div className="mt-4 grid grid-cols-5 gap-2">
+        <div className="mt-4 grid grid-cols-2 gap-2">
           {probs.map((p, i) => (
             <div key={i} className="flex items-center gap-2">
               <span className="w-5">{i}</span>
