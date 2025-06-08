@@ -5,7 +5,13 @@ import { useMLPStore } from "../stores/useMLPStore";
 export const ModelStoragePanel: React.FC = () => {
   const model = useMLPStore((s) => s.model);
   const setModel = useMLPStore((s) => s.setModel);
+  const store = useMLPStore();
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const initNewDefaultModel = async () => {
+    console.log("nouveau modele");
+    store.resetAll();
+  };
 
   const saveToLocalStorage = async () => {
     if (!model) return;
@@ -21,7 +27,10 @@ export const ModelStoragePanel: React.FC = () => {
 
   const downloadModel = async () => {
     if (!model) return;
-    await model.save("downloads://mlp-model");
+    alert(
+      "Attention! TensorflowJS sauve 2 fichiers (un .json pour la structure du modèle et un .bin pour ses poids d'entrainement). Il faut sauver les 2 fichiers",
+    );
+    await model.save("downloads://mlp-visualizer-model");
   };
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,25 +44,31 @@ export const ModelStoragePanel: React.FC = () => {
   };
 
   return (
-    <div className="space-y-2 border bg-white p-4">
-      <h2 className="text-lg font-bold">Sauvegarde / Chargement du modèle</h2>
+    <div className="flex flex-col gap-2 border bg-white p-4">
+      <h2 className="text-lg font-bold">Modèle</h2>
+      <button
+        onClick={initNewDefaultModel}
+        className="cursor-pointer rounded bg-gray-600 px-3 py-1 text-sm text-white hover:bg-gray-700"
+      >
+        Nouveau
+      </button>
       <button
         onClick={saveToLocalStorage}
-        className="rounded bg-blue-600 px-3 py-1 text-sm text-white hover:bg-blue-700"
+        className="cursor-pointer rounded bg-blue-600 px-3 py-1 text-sm text-white hover:bg-blue-700"
       >
-        💾 Sauvegarder (navigateur)
+        Sauvegarde
       </button>
       <button
         onClick={loadFromLocalStorage}
-        className="rounded bg-gray-600 px-3 py-1 text-sm text-white hover:bg-gray-700"
+        className="cursor-pointer rounded bg-gray-600 px-3 py-1 text-sm text-white hover:bg-gray-700"
       >
-        📥 Charger (navigateur)
+        Recharge
       </button>
       <button
         onClick={downloadModel}
-        className="rounded bg-green-600 px-3 py-1 text-sm text-white hover:bg-green-700"
+        className="cursor-pointer rounded bg-green-600 px-3 py-1 text-sm text-white hover:bg-green-700"
       >
-        ⬇️ Télécharger le modèle
+        Export
       </button>
       <div>
         <label className="mt-2 block text-sm">
