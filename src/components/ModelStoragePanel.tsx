@@ -1,26 +1,26 @@
 import React, { useRef } from "react";
 import * as tf from "@tensorflow/tfjs";
+import { useMLPStore } from "../stores/useMLPStore";
 
-type Props = {
-  model: tf.LayersModel;
-  onLoad: (model: tf.LayersModel) => void;
-};
-
-export const ModelStoragePanel: React.FC<Props> = ({ model, onLoad }) => {
+export const ModelStoragePanel: React.FC = () => {
+  const model = useMLPStore((s) => s.model);
+  const setModel = useMLPStore((s) => s.setModel);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const saveToLocalStorage = async () => {
+    if (!model) return;
     await model.save("localstorage://mlp-model");
     alert("Modèle enregistré dans le navigateur.");
   };
 
   const loadFromLocalStorage = async () => {
     const m = await tf.loadLayersModel("localstorage://mlp-model");
-    onLoad(m);
+    setModel(m);
     alert("Modèle chargé depuis le navigateur.");
   };
 
   const downloadModel = async () => {
+    if (!model) return;
     await model.save("downloads://mlp-model");
   };
 
@@ -29,7 +29,7 @@ export const ModelStoragePanel: React.FC<Props> = ({ model, onLoad }) => {
     if (file) {
       const url = URL.createObjectURL(file);
       const m = await tf.loadLayersModel(url);
-      onLoad(m);
+      setModel(m);
       alert("Modèle chargé depuis fichier.");
     }
   };
