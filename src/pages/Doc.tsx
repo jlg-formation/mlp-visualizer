@@ -13,7 +13,7 @@ export default function Doc() {
       </section>
 
       <section id="val_loss">
-        <h2 className="text-lg font-semibold">Val loss</h2>
+        <h2 className="text-lg font-semibold">Val loss</h2>
         <p>
           La <strong>val loss</strong> correspond à la même mesure, mais calculée sur
           l'ensemble de validation afin d'évaluer la généralisation du modèle.
@@ -29,7 +29,7 @@ export default function Doc() {
       </section>
 
       <section id="val_accuracy">
-        <h2 className="text-lg font-semibold">Val accuracy</h2>
+        <h2 className="text-lg font-semibold">Val accuracy</h2>
         <p>
           La <strong>val accuracy</strong> est l'accuracy calculée sur les données
           de validation. Elle permet de vérifier le comportement du modèle sur

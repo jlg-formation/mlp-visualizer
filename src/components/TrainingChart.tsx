@@ -79,31 +79,31 @@ export const TrainingChart: React.FC = () => {
     <div className="p-3 bg-white border">
       <h2 className="text-md font-semibold mb-2">Courbes d'entraînement</h2>
       <Line data={data} options={options} />
-      <div className="mt-2 text-sm space-x-4">
-        <span>
+      <div className="mt-2 text-sm space-y-1">
+        <div>
           <Link to="/doc#loss" className="text-blue-700 underline">
             loss
           </Link>
           : {lastLoss}
-        </span>
-        <span>
+        </div>
+        <div>
           <Link to="/doc#val_loss" className="text-blue-700 underline">
             val_loss
           </Link>
           : {lastValLoss}
-        </span>
-        <span>
+        </div>
+        <div>
           <Link to="/doc#accuracy" className="text-blue-700 underline">
             accuracy
           </Link>
           : {lastAcc}
-        </span>
-        <span>
+        </div>
+        <div>
           <Link to="/doc#val_accuracy" className="text-blue-700 underline">
             val_accuracy
           </Link>
           : {lastValAcc}
-        </span>
+        </div>
       </div>
     </div>
   );
