@@ -109,7 +109,6 @@ mlp-visualizer/
 │ │ └── TooltipTerm.tsx
 │ ├── pages/
 │ │ ├── Home.tsx
-│ │ ├── Playground.tsx
 │ │ └── Doc.tsx
 │ ├── lib/
 │ │ ├── model.ts
