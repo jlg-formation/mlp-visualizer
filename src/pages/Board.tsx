@@ -1,13 +1,10 @@
 import { CanvasInput } from "../components/CanvasInput";
+import { MLPGraph } from "../components/MLPGraph";
 import { ModelConfigurator } from "../components/ModelConfigurator";
 import { ModelStoragePanel } from "../components/ModelStoragePanel";
 import { PredictPanel } from "../components/PredictPanel";
 import { TrainingChart } from "../components/TrainingChart";
 import { TrainingPanel } from "../components/TrainingPanel";
-
-const View = ({ name }: { name: string }) => (
-  <div className="border p-2 text-center text-sm">{name}</div>
-);
 
 export default function Board() {
   return (
@@ -28,7 +25,7 @@ export default function Board() {
             </div>
           </div>
           <div className="flex-grow ">
-            <View name="ModelView" />
+            <MLPGraph />
           </div>
         </div>
 
