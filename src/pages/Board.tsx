@@ -1,5 +1,6 @@
 import { CanvasInput } from "../components/CanvasInput";
 import { ModelConfigurator } from "../components/ModelConfigurator";
+import { ModelStoragePanel } from "../components/ModelStoragePanel";
 import { PredictPanel } from "../components/PredictPanel";
 
 const View = ({ name }: { name: string }) => (
@@ -13,7 +14,7 @@ export default function Board() {
         {/* Left Column */}
         <div className="w-[20em] flex flex-col ">
           <ModelConfigurator />
-          <View name="LoadSaveModelView" />
+          <ModelStoragePanel />
         </div>
 
         {/* Center Column */}
