@@ -40,7 +40,7 @@ export const TrainingPanel: React.FC = () => {
   };
 
   return (
-    <div className="bg-white p-4 rounded shadow space-y-4 mt-4">
+    <div className="bg-white p-4 space-y-4 border">
       <h2 className="text-lg font-semibold">Entraînement du modèle</h2>
       <div className="grid grid-cols-2 gap-4">
         <label className="text-sm">

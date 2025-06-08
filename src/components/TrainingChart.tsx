@@ -65,7 +65,7 @@ export const TrainingChart: React.FC = () => {
   };
 
   return (
-    <div className="mt-6">
+    <div className="p-3 bg-white border">
       <h2 className="text-md font-semibold mb-2">Courbes d'entraînement</h2>
       <Line data={data} options={options} />
     </div>

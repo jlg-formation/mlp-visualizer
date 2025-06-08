@@ -2,6 +2,8 @@ import { CanvasInput } from "../components/CanvasInput";
 import { ModelConfigurator } from "../components/ModelConfigurator";
 import { ModelStoragePanel } from "../components/ModelStoragePanel";
 import { PredictPanel } from "../components/PredictPanel";
+import { TrainingChart } from "../components/TrainingChart";
+import { TrainingPanel } from "../components/TrainingPanel";
 
 const View = ({ name }: { name: string }) => (
   <div className="border p-2 text-center text-sm">{name}</div>
@@ -32,8 +34,8 @@ export default function Board() {
 
         {/* Right Column */}
         <div className="w-[20em] flex flex-col">
-          <View name="TrainModelView" />
-          <View name="GraphicalTrainingView" />
+          <TrainingPanel />
+          <TrainingChart />
         </div>
       </div>
     </div>
