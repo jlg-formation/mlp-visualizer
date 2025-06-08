@@ -3,6 +3,7 @@ import Home from "./pages/Home";
 import Playground from "./pages/Playground";
 import Doc from "./pages/Doc";
 import Board from "./pages/Board";
+import Images from "./pages/Images";
 
 export default function App() {
   return (
@@ -17,6 +18,9 @@ export default function App() {
         <Link to="/board" className="hover:underline">
           Board
         </Link>
+        <Link to="/images" className="hover:underline">
+          Images
+        </Link>
         <Link to="/doc" className="hover:underline">
           Documentation
         </Link>
@@ -26,6 +30,7 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/playground" element={<Playground />} />
           <Route path="/board" element={<Board />} />
+          <Route path="/images" element={<Images />} />
           <Route path="/doc" element={<Doc />} />
         </Routes>
       </main>
