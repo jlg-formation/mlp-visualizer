@@ -35,28 +35,28 @@ export const ModelStoragePanel: React.FC = () => {
   };
 
   return (
-    <div className="bg-white p-4 rounded shadow space-y-2 mt-6">
+    <div className="space-y-2 border bg-white p-4">
       <h2 className="text-lg font-bold">Sauvegarde / Chargement du modèle</h2>
       <button
         onClick={saveToLocalStorage}
-        className="px-3 py-1 bg-blue-600 text-white rounded text-sm hover:bg-blue-700"
+        className="rounded bg-blue-600 px-3 py-1 text-sm text-white hover:bg-blue-700"
       >
         💾 Sauvegarder (navigateur)
       </button>
       <button
         onClick={loadFromLocalStorage}
-        className="px-3 py-1 bg-gray-600 text-white rounded text-sm hover:bg-gray-700"
+        className="rounded bg-gray-600 px-3 py-1 text-sm text-white hover:bg-gray-700"
       >
         📥 Charger (navigateur)
       </button>
       <button
         onClick={downloadModel}
-        className="px-3 py-1 bg-green-600 text-white rounded text-sm hover:bg-green-700"
+        className="rounded bg-green-600 px-3 py-1 text-sm text-white hover:bg-green-700"
       >
         ⬇️ Télécharger le modèle
       </button>
       <div>
-        <label className="block text-sm mt-2">
+        <label className="mt-2 block text-sm">
           📂 Charger depuis un fichier :
         </label>
         <input

@@ -12,8 +12,8 @@ export default function Board() {
       <div className="flex flex-1">
         {/* Left Column */}
         <div className="w-[20em] flex flex-col ">
-          <ModelConfigurator />
           <ModelStoragePanel />
+          <ModelConfigurator />
         </div>
 
         {/* Center Column */}
