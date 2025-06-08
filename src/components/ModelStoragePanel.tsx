@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React from "react";
 import * as tf from "@tensorflow/tfjs";
 import JSZip from "jszip";
 import { useMLPStore } from "../stores/useMLPStore";
@@ -7,7 +7,6 @@ export const ModelStoragePanel: React.FC = () => {
   const model = useMLPStore((s) => s.model);
   const setModel = useMLPStore((s) => s.setModel);
   const store = useMLPStore();
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const initNewDefaultModel = async () => {
     console.log("nouveau modele");
@@ -75,21 +74,15 @@ export const ModelStoragePanel: React.FC = () => {
     const zip = await JSZip.loadAsync(file);
     const jsonStr = await zip.file("model.json")!.async("string");
     const weights = await zip.file("weights.bin")!.async("arraybuffer");
-    const jsonFile = new File([jsonStr], "model.json", { type: "application/json" });
+    const jsonFile = new File([jsonStr], "model.json", {
+      type: "application/json",
+    });
     const weightsFile = new File([weights], "weights.bin");
-    const m = await tf.loadLayersModel(tf.io.browserFiles([jsonFile, weightsFile]));
+    const m = await tf.loadLayersModel(
+      tf.io.browserFiles([jsonFile, weightsFile]),
+    );
     setModel(m);
     alert("Modèle chargé depuis zip.");
-  };
-
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const url = URL.createObjectURL(file);
-      const m = await tf.loadLayersModel(url);
-      setModel(m);
-      alert("Modèle chargé depuis fichier.");
-    }
   };
 
   return (
@@ -119,16 +112,6 @@ export const ModelStoragePanel: React.FC = () => {
       >
         Export
       </button>
-      <div>
-        <label className="mt-2 block text-sm">📂 Charger depuis un fichier :</label>
-        <input
-          type="file"
-          ref={fileInputRef}
-          accept=".json"
-          onChange={handleFileUpload}
-          className="text-sm"
-        />
-      </div>
       <div>
         <label className="mt-2 block text-sm">📦 Importer un zip :</label>
         <input
