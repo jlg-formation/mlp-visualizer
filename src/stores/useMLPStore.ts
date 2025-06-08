@@ -13,9 +13,8 @@ export interface TrainingHistory {
 
 interface MLPStore {
   model: tf.LayersModel | null;
+  /** hidden layer sizes of the current model */
   layers: number[];
-  /** layer sizes extracted from the current model */
-  structure: number[];
   pixels: number[];
   trainData: { xs: tf.Tensor; ys: tf.Tensor } | null;
   testData: { xs: tf.Tensor; ys: tf.Tensor } | null;
@@ -25,7 +24,6 @@ interface MLPStore {
   loadData: () => Promise<void>;
   setModel: (model: tf.LayersModel) => void;
   setLayers: (layers: number[]) => void;
-  setStructure: (structure: number[]) => void;
   setPixels: (pixels: number[]) => void;
   setTrainData: (data: { xs: tf.Tensor; ys: tf.Tensor } | null) => void;
   setTestData: (data: { xs: tf.Tensor; ys: tf.Tensor } | null) => void;
@@ -49,12 +47,10 @@ export const useMLPStore = create<MLPStore>((set, get) => {
   const defaultLayers = [32, 16];
   const defaultModel = createModel(defaultLayers);
   defaultModel.predict(tf.zeros([1, 64]));
-  const defaultStructure = extractLayerStructure(defaultModel);
 
   const store: MLPStore = {
     model: defaultModel,
     layers: defaultLayers,
-    structure: defaultStructure,
     pixels: [],
     trainData: null,
     testData: null,
@@ -84,19 +80,19 @@ export const useMLPStore = create<MLPStore>((set, get) => {
         },
       });
     },
-    setModel: (model) =>
-      set({ model, structure: extractLayerStructure(model) }),
+    setModel: (model) => {
+      const structure = extractLayerStructure(model);
+      set({ model, layers: structure.slice(0, -1) });
+    },
     setLayers: (layers) => {
       const m = createModel(layers);
       m.predict(tf.zeros([1, 64]));
       set({
         layers,
         model: m,
-        structure: extractLayerStructure(m),
         trainingHistory: emptyHistory(),
       });
     },
-    setStructure: (structure) => set({ structure }),
     setPixels: (pixels) => set({ pixels }),
     setTrainData: (data) => set({ trainData: data }),
     setTestData: (data) => set({ testData: data }),
@@ -107,7 +103,6 @@ export const useMLPStore = create<MLPStore>((set, get) => {
       m.predict(tf.zeros([1, 64]));
       set({
         model: m,
-        structure: extractLayerStructure(m),
         training: false,
         trainingHistory: emptyHistory(),
       });
@@ -130,7 +125,6 @@ export const useMLPStore = create<MLPStore>((set, get) => {
       set({
         model: m,
         layers: defaultLayers,
-        structure: extractLayerStructure(m),
         pixels: [],
         training: false,
         trainingHistory: emptyHistory(),

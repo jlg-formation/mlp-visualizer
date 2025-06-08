@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { useMLPStore } from "../stores/useMLPStore";
 
 export const MLPGraph: React.FC = () => {
-  const structure = useMLPStore((s) => s.structure);
-  const layers = [64, ...structure];
+  const hiddenLayers = useMLPStore((s) => s.layers);
+  const layers = [64, ...hiddenLayers, 10];
   const [orientation, setOrientation] = useState<"vertical" | "horizontal">(
     "vertical"
   );
