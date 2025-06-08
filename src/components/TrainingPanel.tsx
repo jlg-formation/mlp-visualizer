@@ -14,7 +14,6 @@ export const TrainingPanel: React.FC = () => {
   const setTraining = useMLPStore((s) => s.setTraining);
   const updateHistory = useMLPStore((s) => s.updateHistory);
   const reinitializeModel = useMLPStore((s) => s.reinitializeModel);
-  const history = useMLPStore((s) => s.trainingHistory);
 
   const startTraining = async () => {
     if (!model || !trainData || !testData) return;
@@ -42,7 +41,7 @@ export const TrainingPanel: React.FC = () => {
   };
 
   return (
-    <div className="bg-white p-4 space-y-4 border">
+    <div className="space-y-4 border bg-white p-4">
       <h2 className="text-lg font-semibold">Entraînement du modèle</h2>
       <div className="grid grid-cols-2 gap-4">
         <label className="text-sm">
@@ -53,7 +52,7 @@ export const TrainingPanel: React.FC = () => {
             min="0.001"
             value={learningRate}
             onChange={(e) => setLearningRate(parseFloat(e.target.value))}
-            className="block w-full border rounded p-1 text-sm mt-1"
+            className="mt-1 block w-full rounded border p-1 text-sm"
           />
         </label>
         <label className="text-sm">
@@ -63,7 +62,7 @@ export const TrainingPanel: React.FC = () => {
             min="1"
             value={epochs}
             onChange={(e) => setEpochs(parseInt(e.target.value))}
-            className="block w-full border rounded p-1 text-sm mt-1"
+            className="mt-1 block w-full rounded border p-1 text-sm"
           />
         </label>
         <label className="text-sm">
@@ -73,27 +72,24 @@ export const TrainingPanel: React.FC = () => {
             min="1"
             value={batchSize}
             onChange={(e) => setBatchSize(parseInt(e.target.value))}
-            className="block w-full border rounded p-1 text-sm mt-1"
+            className="mt-1 block w-full rounded border p-1 text-sm"
           />
         </label>
       </div>
       <button
         onClick={startTraining}
         disabled={training}
-        className="mt-2 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-50"
+        className="mt-2 rounded bg-green-600 px-4 py-2 text-white hover:bg-green-700 disabled:opacity-50"
       >
         {training ? "Entraînement en cours..." : "Lancer l'entraînement"}
       </button>
       <button
         onClick={reinitializeModel}
         disabled={training}
-        className="mt-2 ml-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 disabled:opacity-50"
+        className="mt-2 ml-2 rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700 disabled:opacity-50"
       >
         Réinitialiser le modèle
       </button>
-      {history.epochs.length > 0 && (
-        <p className="text-sm mt-2">Epochs effectuées : {history.epochs.join(", ")}</p>
-      )}
     </div>
   );
 };
