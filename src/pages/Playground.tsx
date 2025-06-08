@@ -90,9 +90,7 @@ export default function Playground() {
 
       {model && (
         <>
-          {structure.length > 0 && (
-            <MLPGraph layers={[64, ...structure]} activations={undefined} />
-          )}
+          {structure.length > 0 && <MLPGraph />}
           <ModelStoragePanel />
         </>
       )}
