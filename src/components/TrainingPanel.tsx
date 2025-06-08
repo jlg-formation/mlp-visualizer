@@ -2,17 +2,10 @@ import React, { useState } from "react";
 import * as tf from "@tensorflow/tfjs";
 import { useMLPStore } from "../stores/useMLPStore";
 
-type Props = {
-  model: tf.LayersModel;
-  trainData: { xs: tf.Tensor; ys: tf.Tensor };
-  testData: { xs: tf.Tensor; ys: tf.Tensor };
-};
-
-export const TrainingPanel: React.FC<Props> = ({
-  model,
-  trainData,
-  testData,
-}) => {
+export const TrainingPanel: React.FC = () => {
+  const model = useMLPStore((s) => s.model);
+  const trainData = useMLPStore((s) => s.trainData);
+  const testData = useMLPStore((s) => s.testData);
   const [learningRate, setLearningRate] = useState(0.01);
   const [epochs, setEpochs] = useState(10);
   const [batchSize, setBatchSize] = useState(32);
@@ -22,6 +15,7 @@ export const TrainingPanel: React.FC<Props> = ({
   const updateHistory = useMLPStore((s) => s.updateHistory);
 
   const startTraining = async () => {
+    if (!model || !trainData || !testData) return;
     setTraining(true);
 
     model.compile({
