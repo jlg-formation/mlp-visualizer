@@ -2,6 +2,7 @@ import { HashRouter as Router, Routes, Route, Link } from "react-router-dom";
 import Home from "./pages/Home";
 import Playground from "./pages/Playground";
 import Doc from "./pages/Doc";
+import Board from "./pages/Board";
 
 export default function App() {
   return (
@@ -13,6 +14,9 @@ export default function App() {
         <Link to="/playground" className="hover:underline">
           Playground
         </Link>
+        <Link to="/board" className="hover:underline">
+          Board
+        </Link>
         <Link to="/doc" className="hover:underline">
           Documentation
         </Link>
@@ -21,6 +25,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/playground" element={<Playground />} />
+          <Route path="/board" element={<Board />} />
           <Route path="/doc" element={<Doc />} />
         </Routes>
       </main>
