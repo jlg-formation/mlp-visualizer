@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import * as tf from "@tensorflow/tfjs";
 import { useMLPStore } from "../stores/useMLPStore";
 
@@ -45,7 +46,9 @@ export const TrainingPanel: React.FC = () => {
       <h2 className="text-lg font-semibold">Entraînement du modèle</h2>
       <div className="grid grid-cols-2 gap-4">
         <label className="text-sm">
-          Learning rate
+          <Link to="/doc#learning_rate" className="text-blue-700 underline">
+            Learning rate
+          </Link>
           <input
             type="number"
             step="0.001"
@@ -56,7 +59,9 @@ export const TrainingPanel: React.FC = () => {
           />
         </label>
         <label className="text-sm">
-          Epochs
+          <Link to="/doc#epoch" className="text-blue-700 underline">
+            Epochs
+          </Link>
           <input
             type="number"
             min="1"
@@ -66,7 +71,9 @@ export const TrainingPanel: React.FC = () => {
           />
         </label>
         <label className="text-sm">
-          Batch size
+          <Link to="/doc#batch_size" className="text-blue-700 underline">
+            Batch size
+          </Link>
           <input
             type="number"
             min="1"
