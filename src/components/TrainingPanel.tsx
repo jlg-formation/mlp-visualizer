@@ -13,6 +13,8 @@ export const TrainingPanel: React.FC = () => {
   const training = useMLPStore((s) => s.training);
   const setTraining = useMLPStore((s) => s.setTraining);
   const updateHistory = useMLPStore((s) => s.updateHistory);
+  const reinitializeModel = useMLPStore((s) => s.reinitializeModel);
+  const history = useMLPStore((s) => s.trainingHistory);
 
   const startTraining = async () => {
     if (!model || !trainData || !testData) return;
@@ -82,6 +84,16 @@ export const TrainingPanel: React.FC = () => {
       >
         {training ? "Entraînement en cours..." : "Lancer l'entraînement"}
       </button>
+      <button
+        onClick={reinitializeModel}
+        disabled={training}
+        className="mt-2 ml-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 disabled:opacity-50"
+      >
+        Réinitialiser le modèle
+      </button>
+      {history.epochs.length > 0 && (
+        <p className="text-sm mt-2">Epochs effectuées : {history.epochs.join(", ")}</p>
+      )}
     </div>
   );
 };

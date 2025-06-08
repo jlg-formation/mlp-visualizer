@@ -30,12 +30,14 @@ interface MLPStore {
   setTrainData: (data: { xs: tf.Tensor; ys: tf.Tensor } | null) => void;
   setTestData: (data: { xs: tf.Tensor; ys: tf.Tensor } | null) => void;
   setTraining: (v: boolean) => void;
+  /** Reinitialize weights and biases while keeping the same architecture */
+  reinitializeModel: () => void;
   resetHistory: () => void;
   updateHistory: (epoch: number, logs: tf.Logs) => void;
   resetAll: () => void;
 }
 
-export const useMLPStore = create<MLPStore>((set) => {
+export const useMLPStore = create<MLPStore>((set, get) => {
   const emptyHistory = (): TrainingHistory => ({
     epochs: [],
     loss: [],
@@ -99,6 +101,17 @@ export const useMLPStore = create<MLPStore>((set) => {
     setTrainData: (data) => set({ trainData: data }),
     setTestData: (data) => set({ testData: data }),
     setTraining: (v) => set({ training: v }),
+    reinitializeModel: () => {
+      const layers = get().layers;
+      const m = createModel(layers);
+      m.predict(tf.zeros([1, 64]));
+      set({
+        model: m,
+        structure: extractLayerStructure(m),
+        training: false,
+        trainingHistory: emptyHistory(),
+      });
+    },
     resetHistory: () => set({ trainingHistory: emptyHistory() }),
     updateHistory: (epoch, logs) =>
       set((state) => ({

@@ -104,6 +104,9 @@ export const TrainingChart: React.FC = () => {
           </Link>
           : {lastValAcc}
         </div>
+        <div>
+          <Link to="/doc#epoch" className="text-blue-700 underline">epochs</Link>: {history.epochs.length}
+        </div>
       </div>
     </div>
   );

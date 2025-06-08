@@ -36,6 +36,16 @@ export default function Doc() {
           des exemples qu'il n'a pas vus pendant l'entraînement.
         </p>
       </section>
+
+      <section id="epoch">
+        <h2 className="text-lg font-semibold">Epoch</h2>
+        <p>
+          Une <strong>epoch</strong> correspond à un passage complet sur l'ensemble
+          des données d'entraînement. Le nombre total d'epochs indique combien de
+          fois le modèle a vu toutes les données depuis la dernière
+          réinitialisation.
+        </p>
+      </section>
     </div>
   );
 }
