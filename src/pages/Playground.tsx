@@ -96,10 +96,7 @@ export default function Playground() {
           {structure.length > 0 && (
             <MLPGraph layers={[64, ...structure]} activations={undefined} />
           )}
-          <ModelStoragePanel
-            model={model}
-            onLoad={(newModel) => setModel(newModel)}
-          />
+          <ModelStoragePanel />
         </>
       )}
       {model && trainData && testData && (
