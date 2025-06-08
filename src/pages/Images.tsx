@@ -12,7 +12,9 @@ export default function Images() {
 
   useEffect(() => {
     const load = async () => {
-      const res = await fetch("/digits_8x8.json");
+      const res = await fetch(
+        new URL("digits_8x8.json", import.meta.env.BASE_URL).toString(),
+      );
       const data: ImageData[] = await res.json();
       const shuffled = data.sort(() => Math.random() - 0.5);
       const split = Math.floor(shuffled.length * 0.8);
