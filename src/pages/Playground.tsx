@@ -13,7 +13,7 @@ export default function Playground() {
   const trainingHistory = useMLPStore((s) => s.trainingHistory);
   const resetAll = useMLPStore((s) => s.resetAll);
 
-  const structure = useMLPStore((s) => s.structure);
+  const layers = useMLPStore((s) => s.layers);
 
   const trainData = useMLPStore((s) => s.trainData);
   const testData = useMLPStore((s) => s.testData);
@@ -38,7 +38,7 @@ export default function Playground() {
 
       {model && (
         <>
-          {structure.length > 0 && <MLPGraph />}
+          {layers.length > 0 && <MLPGraph />}
           <ModelStoragePanel />
         </>
       )}
