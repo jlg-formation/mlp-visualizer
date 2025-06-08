@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
 import * as tf from "@tensorflow/tfjs";
+import JSZip from "jszip";
 import { useMLPStore } from "../stores/useMLPStore";
 
 export const ModelStoragePanel: React.FC = () => {
@@ -27,10 +28,58 @@ export const ModelStoragePanel: React.FC = () => {
 
   const downloadModel = async () => {
     if (!model) return;
-    alert(
-      "Attention! TensorflowJS sauve 2 fichiers (un .json pour la structure du modèle et un .bin pour ses poids d'entrainement). Il faut sauver les 2 fichiers",
-    );
-    await model.save("downloads://mlp-visualizer-model");
+    const handler = tf.io.withSaveHandler(async (artifacts) => {
+      const zip = new JSZip();
+      const json = JSON.stringify({
+        format: artifacts.format,
+        generatedBy: artifacts.generatedBy,
+        convertedBy: artifacts.convertedBy,
+        modelTopology: artifacts.modelTopology,
+        trainingConfig: artifacts.trainingConfig,
+        weightsManifest: [
+          {
+            paths: ["weights.bin"],
+            weights: artifacts.weightSpecs,
+          },
+        ],
+      });
+
+      zip.file("model.json", json);
+      zip.file("weights.bin", artifacts.weightData! as ArrayBuffer);
+      const blob = await zip.generateAsync({ type: "blob" });
+
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "mlp-visualizer-model.zip";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+
+      return {
+        modelArtifactsInfo: {
+          dateSaved: new Date(),
+          modelTopologyType: "JSON",
+          weightDataBytes: (artifacts.weightData! as ArrayBuffer).byteLength,
+        },
+      } as tf.io.SaveResult;
+    });
+
+    await model.save(handler);
+  };
+
+  const handleZipUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const zip = await JSZip.loadAsync(file);
+    const jsonStr = await zip.file("model.json")!.async("string");
+    const weights = await zip.file("weights.bin")!.async("arraybuffer");
+    const jsonFile = new File([jsonStr], "model.json", { type: "application/json" });
+    const weightsFile = new File([weights], "weights.bin");
+    const m = await tf.loadLayersModel(tf.io.browserFiles([jsonFile, weightsFile]));
+    setModel(m);
+    alert("Modèle chargé depuis zip.");
   };
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -71,14 +120,21 @@ export const ModelStoragePanel: React.FC = () => {
         Export
       </button>
       <div>
-        <label className="mt-2 block text-sm">
-          📂 Charger depuis un fichier :
-        </label>
+        <label className="mt-2 block text-sm">📂 Charger depuis un fichier :</label>
         <input
           type="file"
           ref={fileInputRef}
           accept=".json"
           onChange={handleFileUpload}
+          className="text-sm"
+        />
+      </div>
+      <div>
+        <label className="mt-2 block text-sm">📦 Importer un zip :</label>
+        <input
+          type="file"
+          accept=".zip"
+          onChange={handleZipUpload}
           className="text-sm"
         />
       </div>
