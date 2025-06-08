@@ -26,7 +26,7 @@ export default function Images() {
     <div className="p-6 space-y-6">
       <h1 className="text-xl font-bold">Images</h1>
       <section className="space-y-2">
-        <h2 className="font-semibold">Images d\'entraînement</h2>
+        <h2 className="font-semibold">Images d'entraînement</h2>
         {trainImages.length > 0 && <PaginatedImages images={trainImages} />}
       </section>
       <section className="space-y-2">
