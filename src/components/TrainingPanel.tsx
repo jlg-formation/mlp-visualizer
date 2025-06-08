@@ -41,7 +41,7 @@ export const TrainingPanel: React.FC = () => {
   };
 
   return (
-    <div className="space-y-4 border bg-white p-4">
+    <div className="flex flex-col gap-2 border bg-white p-4">
       <h2 className="text-lg font-semibold">Entraînement du modèle</h2>
       <div className="grid grid-cols-2 gap-4">
         <label className="text-sm">
@@ -79,14 +79,14 @@ export const TrainingPanel: React.FC = () => {
       <button
         onClick={startTraining}
         disabled={training}
-        className="mt-2 rounded bg-green-600 px-4 py-2 text-white hover:bg-green-700 disabled:opacity-50"
+        className="mt-2 rounded bg-green-600 px-4 py-1 text-white hover:bg-green-700 disabled:opacity-50"
       >
         {training ? "Entraînement en cours..." : "Lancer l'entraînement"}
       </button>
       <button
         onClick={reinitializeModel}
         disabled={training}
-        className="mt-2 ml-2 rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700 disabled:opacity-50"
+        className="cursor-pointer rounded border border-red-500 px-4 py-1 text-red-500 hover:text-red-600 active:bg-red-100"
       >
         Réinitialiser le modèle
       </button>
