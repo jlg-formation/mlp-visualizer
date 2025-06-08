@@ -1,5 +1,5 @@
 import { ModelStoragePanel } from "../components/ModelStoragePanel";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import * as tf from "@tensorflow/tfjs";
 import { useMLPStore } from "../stores/useMLPStore";
 import { CanvasInput } from "../components/CanvasInput";
@@ -25,16 +25,13 @@ export default function Playground() {
   const resetHistory = useMLPStore((s) => s.resetHistory);
   const resetAll = useMLPStore((s) => s.resetAll);
 
-  const [structure, setStructure] = useState<number[]>([]);
+  const structure = useMLPStore((s) => s.structure);
+  const setStructure = useMLPStore((s) => s.setStructure);
 
-  const [trainData, setTrainData] = useState<{
-    xs: tf.Tensor;
-    ys: tf.Tensor;
-  } | null>(null);
-  const [testData, setTestData] = useState<{
-    xs: tf.Tensor;
-    ys: tf.Tensor;
-  } | null>(null);
+  const trainData = useMLPStore((s) => s.trainData);
+  const testData = useMLPStore((s) => s.testData);
+  const setTrainData = useMLPStore((s) => s.setTrainData);
+  const setTestData = useMLPStore((s) => s.setTestData);
 
   // Charger les données (par ex depuis digits_8x8.json)
   useEffect(() => {
