@@ -96,7 +96,7 @@ export const ModelStoragePanel: React.FC = () => {
       </button>
       <button
         onClick={saveToLocalStorage}
-        className="cursor-pointer rounded bg-blue-600 px-3 py-1 text-sm text-white hover:bg-blue-700"
+        className="cursor-pointer rounded bg-gray-600 px-3 py-1 text-sm text-white hover:bg-gray-700"
       >
         Sauvegarde
       </button>
@@ -108,18 +108,20 @@ export const ModelStoragePanel: React.FC = () => {
       </button>
       <button
         onClick={downloadModel}
-        className="cursor-pointer rounded bg-green-600 px-3 py-1 text-sm text-white hover:bg-green-700"
+        className="cursor-pointer rounded bg-gray-600 px-3 py-1 text-sm text-white hover:bg-gray-700"
       >
         Export
       </button>
       <div>
-        <label className="mt-2 block text-sm">📦 Importer un zip :</label>
-        <input
-          type="file"
-          accept=".zip"
-          onChange={handleZipUpload}
-          className="text-sm"
-        />
+        <label className="mt-2 cursor-pointer rounded bg-gray-600 px-3 py-1 text-sm text-white hover:bg-gray-700">
+          📦 Importer un zip
+          <input
+            type="file"
+            accept=".zip"
+            onChange={handleZipUpload}
+            className="hidden"
+          />
+        </label>
       </div>
     </div>
   );
