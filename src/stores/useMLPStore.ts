@@ -1,5 +1,7 @@
 import { create } from "zustand";
 import * as tf from "@tensorflow/tfjs";
+import { createModel } from "../lib/model";
+import { extractLayerStructure } from "../lib/extractLayerStructure";
 
 export interface TrainingHistory {
   epochs: number[];
@@ -34,6 +36,14 @@ interface MLPStore {
 }
 
 export const useMLPStore = create<MLPStore>((set) => {
+  const emptyHistory = (): TrainingHistory => ({
+    epochs: [],
+    loss: [],
+    valLoss: [],
+    accuracy: [],
+    valAccuracy: [],
+  });
+
   const store: MLPStore = {
     model: null,
     layers: [32, 16],
@@ -42,13 +52,7 @@ export const useMLPStore = create<MLPStore>((set) => {
     trainData: null,
     testData: null,
     training: false,
-    trainingHistory: {
-      epochs: [],
-      loss: [],
-      valLoss: [],
-      accuracy: [],
-      valAccuracy: [],
-    },
+    trainingHistory: emptyHistory(),
     loadData: async () => {
       const res = await fetch("/digits_8x8.json");
       const data: { pixels: number[]; label: number }[] = await res.json();
@@ -73,23 +77,24 @@ export const useMLPStore = create<MLPStore>((set) => {
         },
       });
     },
-    setModel: (model) => set({ model }),
-    setLayers: (layers) => set({ layers }),
+    setModel: (model) =>
+      set({ model, structure: extractLayerStructure(model) }),
+    setLayers: (layers) => {
+      const m = createModel(layers);
+      m.predict(tf.zeros([1, 64]));
+      set({
+        layers,
+        model: m,
+        structure: extractLayerStructure(m),
+        trainingHistory: emptyHistory(),
+      });
+    },
     setStructure: (structure) => set({ structure }),
     setPixels: (pixels) => set({ pixels }),
     setTrainData: (data) => set({ trainData: data }),
     setTestData: (data) => set({ testData: data }),
     setTraining: (v) => set({ training: v }),
-    resetHistory: () =>
-      set({
-        trainingHistory: {
-          epochs: [],
-          loss: [],
-          valLoss: [],
-          accuracy: [],
-          valAccuracy: [],
-        },
-      }),
+    resetHistory: () => set({ trainingHistory: emptyHistory() }),
     updateHistory: (epoch, logs) =>
       set((state) => ({
         trainingHistory: {
@@ -100,25 +105,24 @@ export const useMLPStore = create<MLPStore>((set) => {
           valAccuracy: [...state.trainingHistory.valAccuracy, logs.val_acc ?? 0],
         },
       })),
-    resetAll: () =>
+    resetAll: () => {
+      const defaultLayers = [32, 16];
+      const m = createModel(defaultLayers);
+      m.predict(tf.zeros([1, 64]));
       set({
-        model: null,
-        layers: [32, 16],
-        structure: [],
+        model: m,
+        layers: defaultLayers,
+        structure: extractLayerStructure(m),
         pixels: [],
         training: false,
-        trainingHistory: {
-          epochs: [],
-          loss: [],
-          valLoss: [],
-          accuracy: [],
-          valAccuracy: [],
-        },
-      }),
+        trainingHistory: emptyHistory(),
+      });
+    },
   };
 
-  // automatically load the dataset once the store is created
+  // automatically load the dataset and create the initial model
   void store.loadData();
+  store.setLayers(store.layers);
 
   return store;
 });
