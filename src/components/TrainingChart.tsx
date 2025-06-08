@@ -10,6 +10,7 @@ import {
   Legend,
   Tooltip,
 } from "chart.js";
+import { useMLPStore } from "../stores/useMLPStore";
 
 ChartJS.register(
   LineElement,
@@ -21,17 +22,8 @@ ChartJS.register(
   Tooltip
 );
 
-type Props = {
-  history: {
-    epochs: number[];
-    loss: number[];
-    valLoss: number[];
-    accuracy: number[];
-    valAccuracy: number[];
-  };
-};
-
-export const TrainingChart: React.FC<Props> = ({ history }) => {
+export const TrainingChart: React.FC = () => {
+  const history = useMLPStore((s) => s.trainingHistory);
   const data = {
     labels: history.epochs,
     datasets: [

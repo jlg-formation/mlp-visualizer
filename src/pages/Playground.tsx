@@ -96,16 +96,8 @@ export default function Playground() {
           <ModelStoragePanel />
         </>
       )}
-      {model && trainData && testData && (
-        <TrainingPanel
-          model={model}
-          trainData={trainData}
-          testData={testData}
-        />
-      )}
-      {trainingHistory.epochs.length > 0 && (
-        <TrainingChart history={trainingHistory} />
-      )}
+      {model && trainData && testData && <TrainingPanel />}
+      {trainingHistory.epochs.length > 0 && <TrainingChart />}
 
       <CanvasInput />
       <PredictPanel />
