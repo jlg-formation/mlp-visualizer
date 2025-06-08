@@ -112,17 +112,16 @@ export const ModelStoragePanel: React.FC = () => {
       >
         Export
       </button>
-      <div>
-        <label className="mt-2 cursor-pointer rounded bg-gray-600 px-3 py-1 text-sm text-white hover:bg-gray-700">
-          📦 Importer un zip
-          <input
-            type="file"
-            accept=".zip"
-            onChange={handleZipUpload}
-            className="hidden"
-          />
-        </label>
-      </div>
+
+      <label className="flex cursor-pointer justify-center rounded bg-gray-600 px-3 py-1 text-sm text-white hover:bg-gray-700">
+        <span className="w-full text-center">Import</span>
+        <input
+          type="file"
+          accept=".zip"
+          onChange={handleZipUpload}
+          className="hidden"
+        />
+      </label>
     </div>
   );
 };
