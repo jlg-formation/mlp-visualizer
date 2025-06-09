@@ -11,18 +11,35 @@ export const MLPGraph: React.FC = () => {
   const width = orientation === "vertical" ? layers.length * 120 + 200 : 600;
   const height = orientation === "vertical" ? 400 : layers.length * 120 + 200;
 
-  const toggle = () =>
-    setOrientation((o) => (o === "vertical" ? "horizontal" : "vertical"));
-
   return (
     <div className="flex flex-col gap-2 bg-white">
       <div className="flex p-2">
-        <button
-          onClick={toggle}
-          className="cursor-pointer rounded bg-gray-200 px-2 py-1"
-        >
-          {orientation === "vertical" ? "Vue horizontale" : "Vue verticale"}
-        </button>
+        <div className="inline-flex rounded border">
+          <button
+            onClick={() => setOrientation("vertical")}
+            className={[
+              "px-2 py-1 text-sm",
+              orientation === "vertical"
+                ? "bg-gray-600 text-white"
+                : "bg-gray-200 text-gray-700",
+              "rounded-l",
+            ].join(" ")}
+          >
+            Vertical
+          </button>
+          <button
+            onClick={() => setOrientation("horizontal")}
+            className={[
+              "px-2 py-1 text-sm",
+              orientation === "horizontal"
+                ? "bg-gray-600 text-white"
+                : "bg-gray-200 text-gray-700",
+              "rounded-r border-l",
+            ].join(" ")}
+          >
+            Horizontal
+          </button>
+        </div>
       </div>
       <svg viewBox={`0 0 ${width} ${height}`} className="flex-grow bg-white">
         {layers.map((count, layerIndex) =>
