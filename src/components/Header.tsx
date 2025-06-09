@@ -83,6 +83,7 @@ export default function Header() {
   return (
     <nav className="relative bg-white p-4 font-medium text-blue-700 shadow">
       <div className="flex items-center justify-between">
+        <span className="text-lg font-bold md:hidden">MLP Visualizer</span>
         <div className="hidden gap-4 md:flex">{links}</div>
         <button className="md:hidden" onClick={toggle} aria-label="Toggle menu">
           <svg
