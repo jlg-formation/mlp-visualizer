@@ -100,6 +100,7 @@ export const CanvasInput: React.FC = () => {
     if (ctx) {
       ctx.fillStyle = "white";
       ctx.fillRect(0, 0, size, size);
+      setPixels(Array(64).fill(0));
     }
   };
 
