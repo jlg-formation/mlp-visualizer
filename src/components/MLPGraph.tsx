@@ -131,6 +131,7 @@ export const MLPGraph: React.FC = () => {
                 if (thickness <= 0) return null;
                 const from = fromLayer[i];
                 const to = toLayer[j];
+                if (!from || !to) return null;
                 return (
                   <line
                     key={`w-${layerIndex}-${i}-${j}`}
