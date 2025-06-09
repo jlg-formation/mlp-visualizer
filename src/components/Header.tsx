@@ -28,7 +28,7 @@ export default function Header() {
   );
 
   return (
-    <nav className="bg-white p-4 font-medium text-blue-700 shadow">
+    <nav className="relative bg-white p-4 font-medium text-blue-700 shadow">
       <div className="flex items-center justify-between">
         <div className="hidden gap-4 md:flex">{links}</div>
         <button className="md:hidden" onClick={toggle} aria-label="Toggle menu">
@@ -48,7 +48,9 @@ export default function Header() {
         </button>
       </div>
       {open && (
-        <div className="mt-2 flex flex-col gap-2 md:hidden">{links}</div>
+        <div className="absolute top-full left-0 z-10 flex w-full flex-col gap-2 bg-white shadow-md md:hidden">
+          {links}
+        </div>
       )}
     </nav>
   );
