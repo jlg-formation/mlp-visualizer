@@ -7,6 +7,7 @@ export const CanvasInput: React.FC = () => {
   const cell = size / 8;
   const [isDrawing, setIsDrawing] = useState(false);
   const setPixels = useMLPStore((s) => s.setPixels);
+  const pixels = useMLPStore((s) => s.pixels);
 
   useEffect(() => {
     const ctx = canvasRef.current?.getContext("2d");
@@ -104,21 +105,30 @@ export const CanvasInput: React.FC = () => {
     }
   };
 
+  const hasDrawing = pixels.some((p) => p > 0);
+
   return (
     <div className="flex flex-col justify-between">
-      <canvas
-        ref={canvasRef}
-        width={size}
-        height={size}
-        className="cursor-crosshair touch-none border border-gray-400"
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
-        onMouseLeave={handleMouseUp}
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
-      />
+      <div className="relative">
+        <canvas
+          ref={canvasRef}
+          width={size}
+          height={size}
+          className="cursor-crosshair touch-none border border-gray-400"
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseUp}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        />
+        {!hasDrawing && !isDrawing && (
+          <div className="pointer-events-none absolute inset-0 flex items-center justify-center text-gray-400 select-none">
+            Crayonne un chiffre
+          </div>
+        )}
+      </div>
       <button
         onClick={clearCanvas}
         className="flex-grow cursor-pointer border bg-gray-200 px-4 py-2 hover:bg-gray-300"
