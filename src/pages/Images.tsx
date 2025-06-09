@@ -6,14 +6,20 @@ export default function Images() {
   const valImages = useImageStore((s) => s.valImages);
 
   return (
-    <div className="p-6 space-y-6">
-      <h1 className="text-xl font-bold">Images</h1>
+    <div className="space-y-6 p-6">
+      <h1 className="text-xl font-bold">
+        Images ({trainImages.length + valImages.length})
+      </h1>
       <section className="space-y-2">
-        <h2 className="font-semibold">Images d'entraînement</h2>
+        <h2 className="font-semibold">
+          Images d'entraînement ({trainImages.length})
+        </h2>
         {trainImages.length > 0 && <PaginatedImages images={trainImages} />}
       </section>
       <section className="space-y-2">
-        <h2 className="font-semibold">Images de validation</h2>
+        <h2 className="font-semibold">
+          Images de validation ({valImages.length})
+        </h2>
         {valImages.length > 0 && <PaginatedImages images={valImages} />}
       </section>
     </div>
