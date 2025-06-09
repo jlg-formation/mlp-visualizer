@@ -38,6 +38,13 @@ export default function Header() {
         Images
       </Link>
       <Link
+        to="/model"
+        className="px-4 py-2 hover:underline md:px-0 md:py-0"
+        onClick={close}
+      >
+        Modèle
+      </Link>
+      <Link
         to="/doc"
         className="px-4 py-2 hover:underline md:px-0 md:py-0"
         onClick={close}
