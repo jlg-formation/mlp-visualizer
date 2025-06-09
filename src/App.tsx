@@ -4,6 +4,7 @@ import Doc from "./pages/Doc";
 import Board from "./pages/Board";
 import Images from "./pages/Images";
 import Test from "./pages/Test";
+import Training from "./pages/Training";
 import Header from "./components/Header";
 
 export default function App() {
@@ -17,6 +18,7 @@ export default function App() {
           <Route path="/images" element={<Images />} />
           <Route path="/doc" element={<Doc />} />
           <Route path="/test" element={<Test />} />
+          <Route path="/training" element={<Training />} />
         </Routes>
       </main>
     </Router>

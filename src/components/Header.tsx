@@ -24,6 +24,13 @@ export default function Header() {
         Board
       </Link>
       <Link
+        to="/training"
+        className="px-4 py-2 hover:underline md:px-0 md:py-0"
+        onClick={close}
+      >
+        Training
+      </Link>
+      <Link
         to="/images"
         className="px-4 py-2 hover:underline md:px-0 md:py-0"
         onClick={close}
