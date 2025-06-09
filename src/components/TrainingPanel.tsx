@@ -31,8 +31,14 @@ export const TrainingPanel: React.FC = () => {
       batchSize,
       validationData: [testData.xs, testData.ys],
       callbacks: {
+        onBatchEnd: async () => {
+          // Yield to the browser so UI updates like the spinner stay smooth.
+          await tf.nextFrame();
+        },
         onEpochEnd: async (epoch, logs) => {
           updateHistory(epoch, logs as tf.Logs);
+          // Yield after each epoch as well.
+          await tf.nextFrame();
         },
         onTrainEnd: async () => {
           setTraining(false);
