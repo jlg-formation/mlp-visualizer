@@ -101,6 +101,7 @@ export const MLPGraph: React.FC = () => {
 
   return (
     <div className="flex w-full flex-col gap-2 bg-white">
+      <h2 className="px-2 text-lg font-bold">Visualisation du modèle</h2>
       <div className="flex p-2">
         <div className="inline-flex rounded border">
           <button
