@@ -1,15 +1,36 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import * as tf from "@tensorflow/tfjs";
 import { useMLPStore } from "../stores/useMLPStore";
 
 export const MLPGraph: React.FC = () => {
   const hiddenLayers = useMLPStore((s) => s.layers);
+  const model = useMLPStore((s) => s.model);
+  const pixels = useMLPStore((s) => s.pixels);
   const layers = [64, ...hiddenLayers, 10];
   const [orientation, setOrientation] = useState<"vertical" | "horizontal">(
     "vertical",
   );
+  const [activations, setActivations] = useState<number[][]>([]);
 
   const width = orientation === "vertical" ? layers.length * 120 + 200 : 600;
   const height = orientation === "vertical" ? 400 : layers.length * 120 + 200;
+
+  useEffect(() => {
+    if (!model || pixels.length !== 64) {
+      setActivations([]);
+      return;
+    }
+    const acts: number[][] = [];
+    tf.tidy(() => {
+      let tensor: tf.Tensor = tf.tensor2d([pixels], [1, 64]);
+      acts.push(pixels);
+      for (const layer of model.layers) {
+        tensor = layer.apply(tensor) as tf.Tensor;
+        acts.push(Array.from(tensor.dataSync()));
+      }
+    });
+    setActivations(acts);
+  }, [model, pixels]);
 
   return (
     <div className="flex flex-col gap-2 bg-white">
@@ -57,13 +78,17 @@ export const MLPGraph: React.FC = () => {
                   : height / 2
                 : 100 + layerIndex * 120;
 
+            const v = activations[layerIndex]?.[i] ?? 0;
+            const intensity = Math.max(0, Math.min(1, v));
+            const color = `rgb(0, ${Math.round(intensity * 255)}, 0)`;
+
             return (
               <circle
                 key={`${layerIndex}-${i}`}
                 cx={x}
                 cy={y}
                 r="10"
-                fill="black"
+                fill={color}
                 stroke="gray"
                 strokeWidth="1"
               />
