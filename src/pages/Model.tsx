@@ -4,10 +4,12 @@ import { MLPGraph } from "../components/MLPGraph";
 
 export default function Model() {
   return (
-    <div className="flex flex-col items-center gap-4 p-4">
-      <ModelStoragePanel />
-      <ModelConfigurator />
-      <MLPGraph />
+    <div className="flex justify-center">
+      <div className="flex w-full max-w-sm flex-col gap-4 p-4">
+        <ModelStoragePanel />
+        <ModelConfigurator />
+        <MLPGraph />
+      </div>
     </div>
   );
 }
