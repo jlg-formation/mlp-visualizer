@@ -158,7 +158,7 @@ export const MLPGraph: React.FC = () => {
                 key={`${layerIndex}-${i}`}
                 cx={x}
                 cy={y}
-                r="10"
+                r="4"
                 fill={color}
                 stroke="gray"
                 strokeWidth="1"

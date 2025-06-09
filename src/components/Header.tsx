@@ -20,14 +20,31 @@ export default function Header() {
         Accueil
       </NavLink>
       <NavLink
-        to="/board"
+        to="/images"
         className={({ isActive }) =>
           "px-4 py-2 hover:underline md:px-0 md:py-0" +
           (isActive ? " font-bold underline" : "")
         }
         onClick={close}
       >
+        Images
+      </NavLink>
+      <NavLink
+        to="/board"
+        className={({ isActive }) =>
+          "hidden px-4 py-2 hover:underline md:inline md:px-0 md:py-0" +
+          (isActive ? " font-bold underline" : "")
+        }
+        onClick={close}
+      >
         Board
+      </NavLink>
+      <NavLink
+        to="/model"
+        className="px-4 py-2 hover:underline md:px-0 md:py-0"
+        onClick={close}
+      >
+        Modèle
       </NavLink>
       <NavLink
         to="/training"
@@ -39,22 +56,16 @@ export default function Header() {
       >
         Training
       </NavLink>
+
       <NavLink
-        to="/images"
+        to="/test"
         className={({ isActive }) =>
           "px-4 py-2 hover:underline md:px-0 md:py-0" +
           (isActive ? " font-bold underline" : "")
         }
         onClick={close}
       >
-        Images
-      </NavLink>
-      <NavLink
-        to="/model"
-        className="px-4 py-2 hover:underline md:px-0 md:py-0"
-        onClick={close}
-      >
-        Modèle
+        Test
       </NavLink>
       <NavLink
         to="/doc"
@@ -65,16 +76,6 @@ export default function Header() {
         onClick={close}
       >
         Documentation
-      </NavLink>
-      <NavLink
-        to="/test"
-        className={({ isActive }) =>
-          "px-4 py-2 hover:underline md:px-0 md:py-0" +
-          (isActive ? " font-bold underline" : "")
-        }
-        onClick={close}
-      >
-        Test
       </NavLink>
     </>
   );
