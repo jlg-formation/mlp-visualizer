@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { useState } from "react";
 
 export default function Header() {
@@ -9,55 +9,73 @@ export default function Header() {
 
   const links = (
     <>
-      <Link
+      <NavLink
         to="/"
-        className="px-4 py-2 hover:underline md:px-0 md:py-0"
+        className={({ isActive }) =>
+          "px-4 py-2 hover:underline md:px-0 md:py-0" +
+          (isActive ? " font-bold underline" : "")
+        }
         onClick={close}
       >
         Accueil
-      </Link>
-      <Link
+      </NavLink>
+      <NavLink
         to="/board"
-        className="px-4 py-2 hover:underline md:px-0 md:py-0"
+        className={({ isActive }) =>
+          "px-4 py-2 hover:underline md:px-0 md:py-0" +
+          (isActive ? " font-bold underline" : "")
+        }
         onClick={close}
       >
         Board
-      </Link>
-      <Link
+      </NavLink>
+      <NavLink
         to="/training"
-        className="px-4 py-2 hover:underline md:px-0 md:py-0"
+        className={({ isActive }) =>
+          "px-4 py-2 hover:underline md:px-0 md:py-0" +
+          (isActive ? " font-bold underline" : "")
+        }
         onClick={close}
       >
         Training
-      </Link>
-      <Link
+      </NavLink>
+      <NavLink
         to="/images"
-        className="px-4 py-2 hover:underline md:px-0 md:py-0"
+        className={({ isActive }) =>
+          "px-4 py-2 hover:underline md:px-0 md:py-0" +
+          (isActive ? " font-bold underline" : "")
+        }
         onClick={close}
       >
         Images
-      </Link>
-      <Link
+      </NavLink>
+      <NavLink
         to="/model"
         className="px-4 py-2 hover:underline md:px-0 md:py-0"
         onClick={close}
       >
         Modèle
-      </Link>
-      <Link
+      </NavLink>
+      <NavLink
         to="/doc"
-        className="px-4 py-2 hover:underline md:px-0 md:py-0"
+        className={({ isActive }) =>
+          "px-4 py-2 hover:underline md:px-0 md:py-0" +
+          (isActive ? " font-bold underline" : "")
+        }
         onClick={close}
       >
         Documentation
-      </Link>
-      <Link
+      </NavLink>
+      <NavLink
         to="/test"
-        className="px-4 py-2 hover:underline md:px-0 md:py-0"
+        className={({ isActive }) =>
+          "px-4 py-2 hover:underline md:px-0 md:py-0" +
+          (isActive ? " font-bold underline" : "")
+        }
         onClick={close}
       >
         Test
-      </Link>
+      </NavLink>
     </>
   );
 
