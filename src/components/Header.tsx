@@ -10,16 +10,6 @@ export default function Header() {
   const links = (
     <>
       <NavLink
-        to="/"
-        className={({ isActive }) =>
-          "px-4 py-2 hover:underline md:px-0 md:py-0" +
-          (isActive ? " font-bold underline" : "")
-        }
-        onClick={close}
-      >
-        Accueil
-      </NavLink>
-      <NavLink
         to="/images"
         className={({ isActive }) =>
           "px-4 py-2 hover:underline md:px-0 md:py-0" +
@@ -83,7 +73,9 @@ export default function Header() {
   return (
     <nav className="relative bg-white p-4 font-medium text-blue-700 shadow">
       <div className="flex items-center justify-between">
-        <span className="text-lg font-bold md:hidden">MLP Visualizer</span>
+        <NavLink to="/" className="text-lg font-bold" onClick={close}>
+          MLP Visualizer
+        </NavLink>
         <div className="hidden gap-4 md:flex">{links}</div>
         <button className="md:hidden" onClick={toggle} aria-label="Toggle menu">
           <svg
