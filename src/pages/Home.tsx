@@ -1,6 +1,17 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
+const MD_BREAKPOINT = 768;
 
 export default function Home() {
+  const navigate = useNavigate();
+
+  const handleStart = () => {
+    if (window.innerWidth < MD_BREAKPOINT) {
+      navigate("/model");
+    } else {
+      navigate("/board");
+    }
+  };
   return (
     <div className="relative flex min-h-screen items-start justify-start overflow-hidden bg-gray-100">
       <img
@@ -13,12 +24,12 @@ export default function Home() {
         <p className="text-lg md:text-2xl">
           avec un réseau de neurones type MLP.
         </p>
-        <Link
-          to="/board"
+        <button
+          onClick={handleStart}
           className="rounded bg-blue-600 px-6 py-3 text-lg font-medium text-white hover:bg-blue-700"
         >
           Demarrez
-        </Link>
+        </button>
       </div>
     </div>
   );
