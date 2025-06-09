@@ -57,7 +57,7 @@ export const useMLPStore = create<MLPStore>((set, get) => {
     training: false,
     trainingHistory: emptyHistory(),
     loadData: async () => {
-      const res = await fetch("/digits_8x8.json");
+      const res = await fetch("./digits_8x8.json");
       const data: { pixels: number[]; label: number }[] = await res.json();
 
       const shuffled = data.sort(() => Math.random() - 0.5);
@@ -115,7 +115,10 @@ export const useMLPStore = create<MLPStore>((set, get) => {
           loss: [...state.trainingHistory.loss, logs.loss ?? 0],
           valLoss: [...state.trainingHistory.valLoss, logs.val_loss ?? 0],
           accuracy: [...state.trainingHistory.accuracy, logs.acc ?? 0],
-          valAccuracy: [...state.trainingHistory.valAccuracy, logs.val_acc ?? 0],
+          valAccuracy: [
+            ...state.trainingHistory.valAccuracy,
+            logs.val_acc ?? 0,
+          ],
         },
       })),
     resetAll: () => {
