@@ -25,8 +25,8 @@ export const PredictPanel: React.FC = () => {
   }, [input, model]);
 
   return (
-    <div className="p-4 border bg-white h-full">
-      <h2 className="text-lg font-semibold mb-2">Prédiction</h2>
+    <div className="flex h-full flex-col border bg-white p-4">
+      <h2 className="mb-2 text-lg font-semibold">Prédiction</h2>
 
       {prediction !== null && (
         <p className="text-2xl">
@@ -40,9 +40,9 @@ export const PredictPanel: React.FC = () => {
           {probs.map((p, i) => (
             <div key={i} className="flex items-center gap-2">
               <span className="w-5">{i}</span>
-              <div className="w-full h-3 bg-gray-200 rounded">
+              <div className="h-3 w-full rounded bg-gray-200">
                 <div
-                  className="h-3 bg-green-500 rounded"
+                  className="h-3 rounded bg-green-500"
                   style={{ width: `${(p * 100).toFixed(1)}%` }}
                 />
               </div>

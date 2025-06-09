@@ -20,7 +20,7 @@ ChartJS.register(
   CategoryScale,
   Title,
   Legend,
-  Tooltip
+  Tooltip,
 );
 
 export const TrainingChart: React.FC = () => {
@@ -66,20 +66,18 @@ export const TrainingChart: React.FC = () => {
   };
 
   const lastIndex = history.epochs.length - 1;
-  const lastLoss =
-    lastIndex >= 0 ? history.loss[lastIndex].toFixed(4) : "-";
+  const lastLoss = lastIndex >= 0 ? history.loss[lastIndex].toFixed(4) : "-";
   const lastValLoss =
     lastIndex >= 0 ? history.valLoss[lastIndex].toFixed(4) : "-";
-  const lastAcc =
-    lastIndex >= 0 ? history.accuracy[lastIndex].toFixed(4) : "-";
+  const lastAcc = lastIndex >= 0 ? history.accuracy[lastIndex].toFixed(4) : "-";
   const lastValAcc =
     lastIndex >= 0 ? history.valAccuracy[lastIndex].toFixed(4) : "-";
 
   return (
-    <div className="p-3 bg-white border">
-      <h2 className="text-md font-semibold mb-2">Courbes d'entraînement</h2>
+    <div className="flex w-full flex-col border bg-white p-3">
+      <h2 className="text-md mb-2 font-semibold">Courbes d'entraînement</h2>
       <Line data={data} options={options} />
-      <div className="mt-2 text-sm space-y-1">
+      <div className="mt-2 space-y-1 text-sm">
         <div>
           <Link to="/doc#loss" className="text-blue-700 underline">
             loss
@@ -105,7 +103,10 @@ export const TrainingChart: React.FC = () => {
           : {lastValAcc}
         </div>
         <div>
-          <Link to="/doc#epoch" className="text-blue-700 underline">epochs</Link>: {history.epochs.length}
+          <Link to="/doc#epoch" className="text-blue-700 underline">
+            epochs
+          </Link>
+          : {history.epochs.length}
         </div>
       </div>
     </div>

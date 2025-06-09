@@ -30,7 +30,7 @@ export const ModelConfigurator: React.FC = () => {
   };
 
   return (
-    <div className="w-full max-w-sm space-y-3 rounded bg-white p-4 shadow">
+    <div className="w-full max-w-sm space-y-3 border bg-white p-4">
       <h2 className="text-lg font-bold">Configuration du modèle</h2>
       {localLayers.map((size, i) => (
         <div key={i} className="flex items-center gap-2">

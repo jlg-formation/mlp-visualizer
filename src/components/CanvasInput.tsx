@@ -105,7 +105,7 @@ export const CanvasInput: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col justify-between">
       <canvas
         ref={canvasRef}
         width={size}
@@ -121,7 +121,7 @@ export const CanvasInput: React.FC = () => {
       />
       <button
         onClick={clearCanvas}
-        className="cursor-pointer bg-gray-200 px-4 py-1 hover:bg-gray-300"
+        className="flex-grow cursor-pointer border bg-gray-200 px-4 py-2 hover:bg-gray-300"
       >
         Effacer
       </button>

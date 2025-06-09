@@ -3,7 +3,7 @@ import { TrainingPanel } from "../components/TrainingPanel";
 
 export default function Training() {
   return (
-    <div className="flex flex-col items-center gap-4 p-4">
+    <div className="flex flex-wrap items-start justify-center gap-4 p-4">
       <div className="w-full max-w-md">
         <TrainingPanel />
       </div>
