@@ -86,7 +86,7 @@ export const TrainingPanel: React.FC = () => {
       <button
         onClick={startTraining}
         disabled={training}
-        className="mt-2 rounded bg-green-600 px-4 py-1 text-white hover:bg-green-700 disabled:opacity-50"
+        className="mt-2 cursor-pointer rounded bg-green-600 px-4 py-1 text-white hover:bg-green-700 disabled:opacity-50"
       >
         {training ? "Entraînement en cours..." : "Lancer l'entraînement"}
       </button>
