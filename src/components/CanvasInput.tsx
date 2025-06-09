@@ -38,7 +38,7 @@ export const CanvasInput: React.FC = () => {
     draw(e.clientX - rect.left, e.clientY - rect.top);
   };
 
-  const handleMouseUp = () => {
+  const finishDrawing = () => {
     setIsDrawing(false);
     const ctx = canvasRef.current?.getContext("2d");
     if (ctx) {
@@ -67,6 +67,34 @@ export const CanvasInput: React.FC = () => {
     }
   };
 
+  const handleMouseUp = () => {
+    finishDrawing();
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    e.preventDefault();
+    setIsDrawing(true);
+    const rect = canvasRef.current!.getBoundingClientRect();
+    const touch = e.touches[0];
+    if (touch) {
+      draw(touch.clientX - rect.left, touch.clientY - rect.top);
+    }
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    e.preventDefault();
+    if (!isDrawing) return;
+    const rect = canvasRef.current!.getBoundingClientRect();
+    const touch = e.touches[0];
+    if (touch) {
+      draw(touch.clientX - rect.left, touch.clientY - rect.top);
+    }
+  };
+
+  const handleTouchEnd = () => {
+    finishDrawing();
+  };
+
   const clearCanvas = () => {
     const ctx = canvasRef.current?.getContext("2d");
     if (ctx) {
@@ -81,15 +109,18 @@ export const CanvasInput: React.FC = () => {
         ref={canvasRef}
         width={size}
         height={size}
-        className="border border-gray-400 cursor-crosshair"
+        className="cursor-crosshair touch-none border border-gray-400"
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseUp}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
       />
       <button
         onClick={clearCanvas}
-        className="px-4 py-1 bg-gray-200 hover:bg-gray-300 cursor-pointer"
+        className="cursor-pointer bg-gray-200 px-4 py-1 hover:bg-gray-300"
       >
         Effacer
       </button>
