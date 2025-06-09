@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import * as tf from "@tensorflow/tfjs";
 import { useMLPStore } from "../stores/useMLPStore";
 
+const DEAD_THRESHOLD = 1e-6;
+
 export const MLPGraph: React.FC = () => {
   const hiddenLayers = useMLPStore((s) => s.layers);
   const model = useMLPStore((s) => s.model);
@@ -14,6 +16,11 @@ export const MLPGraph: React.FC = () => {
   const [weights, setWeights] = useState<number[][][]>([]);
   const [maxWeight, setMaxWeight] = useState(1);
   const [showWeights, setShowWeights] = useState(false);
+  const [maxActivations, setMaxActivations] = useState<number[][]>([]);
+  const [showDead, setShowDead] = useState(false);
+
+  const trainData = useMLPStore((s) => s.trainData);
+  const historyLength = useMLPStore((s) => s.trainingHistory.epochs.length);
 
   const width = orientation === "vertical" ? layers.length * 120 + 200 : 600;
   const height = orientation === "vertical" ? 400 : layers.length * 120 + 200;
@@ -56,6 +63,23 @@ export const MLPGraph: React.FC = () => {
     setMaxWeight(maxW);
     setWeights(ws);
   }, [model]);
+
+  useEffect(() => {
+    if (!model || !trainData) {
+      setMaxActivations([]);
+      return;
+    }
+    const acts: number[][] = [];
+    tf.tidy(() => {
+      let tensor: tf.Tensor = trainData.xs;
+      acts.push(Array.from(tensor.max(0).dataSync()));
+      for (const layer of model.layers) {
+        tensor = layer.apply(tensor) as tf.Tensor;
+        acts.push(Array.from(tensor.max(0).dataSync()));
+      }
+    });
+    setMaxActivations(acts);
+  }, [model, trainData, historyLength]);
 
   const neuronPositions = layers.map((count, layerIndex) =>
     Array.from({ length: count }).map((_, i) => {
@@ -118,6 +142,18 @@ export const MLPGraph: React.FC = () => {
             {showWeights ? "Hide weights" : "Show weights"}
           </button>
         </div>
+        <div className="ml-2 inline-flex rounded border">
+          <button
+            onClick={() => setShowDead((s) => !s)}
+            className={[
+              "px-2 py-1 text-sm",
+              showDead ? "bg-gray-600 text-white" : "bg-gray-200 text-gray-700",
+              "rounded",
+            ].join(" ")}
+          >
+            {showDead ? "Hide dead" : "Show dead"}
+          </button>
+        </div>
       </div>
       <svg viewBox={`0 0 ${width} ${height}`} className="flex-grow bg-white">
         {showWeights &&
@@ -152,7 +188,14 @@ export const MLPGraph: React.FC = () => {
 
             const v = activations[layerIndex]?.[i] ?? 0;
             const intensity = Math.max(0, Math.min(1, v));
-            const color = `rgb(0, ${Math.round(intensity * 255)}, 0)`;
+            const isDead =
+              showDead &&
+              (maxActivations[layerIndex]?.[i] ?? 0) <= DEAD_THRESHOLD &&
+              layerIndex > 0 &&
+              layerIndex < layers.length - 1;
+            const color = isDead
+              ? "red"
+              : `rgb(0, ${Math.round(intensity * 255)}, 0)`;
 
             return (
               <circle

@@ -69,6 +69,20 @@ export default function Doc() {
           plus stable du gradient.
         </p>
       </section>
+
+      <section id="dead_neurons">
+        <h2 className="text-lg font-semibold">Neurones morts</h2>
+        <p>
+          Un neurone est dit <strong>mort</strong> lorsqu'il reste toujours
+          inactif, quelle que soit l'entrée. Pour un réseau utilisant des
+          fonctions ReLU, cela se produit quand la sortie du neurone est
+          constamment inférieure ou égale à zéro. Cela peut provenir d'une
+          initialisation défavorable ou d'un taux d'apprentissage mal choisi.
+          Les neurones morts n'apportent rien au modèle. Ils sont signalés dans
+          le graphique par la couleur rouge lorsque l'option "Show dead" est
+          activée.
+        </p>
+      </section>
     </div>
   );
 }
