@@ -76,7 +76,7 @@ export const MLPGraph: React.FC = () => {
   );
 
   return (
-    <div className="flex flex-col gap-2 bg-white">
+    <div className="flex w-full flex-col gap-2 bg-white">
       <div className="flex p-2">
         <div className="inline-flex rounded border">
           <button
