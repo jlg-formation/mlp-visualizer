@@ -30,7 +30,7 @@ export const ModelConfigurator: React.FC = () => {
   };
 
   return (
-    <div className="bg-white p-4 rounded shadow space-y-3">
+    <div className="space-y-3 rounded bg-white p-4 shadow">
       <h2 className="text-lg font-bold">Configuration du modèle</h2>
       {localLayers.map((size, i) => (
         <div key={i} className="flex items-center gap-2">
@@ -40,12 +40,12 @@ export const ModelConfigurator: React.FC = () => {
             min="1"
             value={size}
             onChange={(e) => updateLayer(i, parseInt(e.target.value))}
-            className="w-20 border p-1 rounded text-sm"
+            className="w-20 rounded border p-1 text-sm"
           />
           {localLayers.length > 1 && (
             <button
               onClick={() => removeLayer(i)}
-              className="text-red-500 text-sm hover:underline"
+              className="cursor-pointer text-sm text-red-500 hover:underline"
             >
               Supprimer
             </button>
@@ -54,7 +54,7 @@ export const ModelConfigurator: React.FC = () => {
       ))}
       <button
         onClick={addLayer}
-        className="mt-2 px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded text-sm"
+        className="mt-2 cursor-pointer rounded bg-gray-200 px-3 py-1 text-sm hover:bg-gray-300"
       >
         + Ajouter une couche
       </button>
