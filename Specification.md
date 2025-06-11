@@ -28,9 +28,9 @@ Créer une application web 100% front-end qui illustre de manière interactive l
   - 80% : entraînement
   - 20% : test
 
-### 2. Visualisation du MLP
+-### 2. Visualisation du MLP
 
-- Affichage des couches sous forme de cercles connectés :
+- Affichage des couches sous forme de cercles connectés. La couche de sortie est représentée par des triangles pour la distinguer des couches cachées :
   - Vert : neurone activé (valeur > 0.5)
   - Noir : neurone peu ou pas activé
 - Connections visibles entre chaque couche.
