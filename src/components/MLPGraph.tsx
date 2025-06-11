@@ -198,7 +198,15 @@ export const MLPGraph: React.FC = () => {
               ? "red"
               : `rgb(0, ${Math.round(intensity * 255)}, 0)`;
 
-            return (
+            return layerIndex === layers.length - 1 ? (
+              <polygon
+                key={`${layerIndex}-${i}`}
+                points={`${x - 4},${y + 4} ${x + 4},${y + 4} ${x},${y - 4}`}
+                fill={color}
+                stroke="gray"
+                strokeWidth="1"
+              />
+            ) : (
               <circle
                 key={`${layerIndex}-${i}`}
                 cx={x}
