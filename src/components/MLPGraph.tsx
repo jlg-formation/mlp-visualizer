@@ -1,6 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import * as tf from "@tensorflow/tfjs";
 import { useMLPStore } from "../stores/useMLPStore";
+import {
+  computeParameterStats,
+  formatKiB,
+  formatNumber,
+} from "../lib/parameters";
 
 const DEAD_THRESHOLD = 1e-6;
 
@@ -9,6 +14,10 @@ export const MLPGraph: React.FC = () => {
   const model = useMLPStore((s) => s.model);
   const pixels = useMLPStore((s) => s.pixels);
   const layers = [64, ...hiddenLayers, 10];
+  const paramStats = useMemo(
+    () => computeParameterStats([64, ...hiddenLayers, 10]),
+    [hiddenLayers],
+  );
   const [orientation, setOrientation] = useState<"vertical" | "horizontal">(
     "vertical",
   );
@@ -228,6 +237,46 @@ export const MLPGraph: React.FC = () => {
           }),
         )}
       </svg>
+      <div className="px-2 text-sm">
+        <table className="w-full border-collapse text-left">
+          <thead>
+            <tr className="border-b">
+              <th className="py-1">Couche</th>
+              <th className="py-1 text-right">Poids</th>
+              <th className="py-1 text-right">Biais</th>
+              <th className="py-1 text-right">Sous-total</th>
+            </tr>
+          </thead>
+          <tbody>
+            {paramStats.layers.map((l, i) => (
+              <tr key={i}>
+                <td className="py-1">
+                  {i + 1} ({formatNumber(l.inputs)} → {formatNumber(l.outputs)})
+                </td>
+                <td className="py-1 text-right">{formatNumber(l.weights)}</td>
+                <td className="py-1 text-right">{formatNumber(l.biases)}</td>
+                <td className="py-1 text-right">{formatNumber(l.subtotal)}</td>
+              </tr>
+            ))}
+          </tbody>
+          <tfoot>
+            <tr className="border-t font-bold">
+              <td className="py-1">Total</td>
+              <td className="py-1 text-right">
+                {formatNumber(paramStats.totalWeights)}
+              </td>
+              <td className="py-1 text-right">
+                {formatNumber(paramStats.totalBiases)}
+              </td>
+              <td className="py-1 text-right">{formatNumber(paramStats.total)}</td>
+            </tr>
+          </tfoot>
+        </table>
+        <p className="mt-1">
+          Paramètres : {formatNumber(paramStats.total)} · Empreinte mémoire :{" "}
+          {formatKiB(paramStats.memoryKiB)}
+        </p>
+      </div>
     </div>
   );
 };

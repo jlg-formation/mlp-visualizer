@@ -1,0 +1,1 @@
+Je voudrais que, dans le board, on puisse afficher en temps réel le nombre de paramètres d'un réseau de neurones, donc du MLP qu'on est en train de configurer. Parmi le nombre de paramètres, je voudrais qu'on ait le détail des poids et des biais. 
